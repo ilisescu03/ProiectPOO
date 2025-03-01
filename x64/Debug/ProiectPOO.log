@@ -1,0 +1,10 @@
+﻿  ProiectPOO.cpp
+E:\External\include\SFML\System\Exception.hpp(41,47): warning C4275: non dll-interface class 'std::runtime_error' used as base for dll-interface class 'sf::Exception'
+  (compiling source file 'ProiectPOO.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\stdexcept(100,19):
+      see declaration of 'std::runtime_error'
+      E:\External\include\SFML\System\Exception.hpp(41,23):
+      see declaration of 'sf::Exception'
+  
+E:\ProiectPOO\ProiectPOO\ProiectPOO.cpp(14,25): warning C4834: discarding return value of function with [[nodiscard]] attribute
+  ProiectPOO.vcxproj -> E:\ProiectPOO\x64\Debug\ProiectPOO.exe
