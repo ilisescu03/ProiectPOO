@@ -11,7 +11,7 @@ int main()
 {
     
     RenderWindow window(VideoMode({ 1366, 768 }), "Zombie Invasion Survival");
-	Player player("Aditzuu", 100.f, 100.f, 2.f);
+	Player player("Aditzuu", 100.f, 100.f, true, 100.f, 100.f, 2.f);
     cout << "App is running..."<<endl;
     cout << player << endl;
     while (window.isOpen())
@@ -26,7 +26,9 @@ int main()
 		player.move();
 
 		window.clear(Color(200, 200, 200));
+		
 		player.draw(window);
+		
 		window.display();
     }
 	cout << "App is closing..." << endl;
