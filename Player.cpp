@@ -4,7 +4,7 @@
 #include <string>
 
 using namespace std;
-Player::Player(string _name, float _health, float _maxhealth, bool _isAlive, float x, float y, float _speed) : name(_name), speed(_speed), health(_health), maxhealth(_maxhealth), isAlive(_isAlive), position(Vector2f(x, y)), initialPosition(Vector2f(x, y))
+Player::Player(string _name, float _health, float _maxhealth, bool _isAlive, float x, float y, float _speed) : name(_name), speed(_speed), health(_health), maxhealth(_maxhealth), isAlive(_isAlive), position(Vector2f(x, y)), initialPosition(Vector2f(x, y)), lastMovement(Vector2f(x, y))
 {
    
    
@@ -26,6 +26,11 @@ Player::Player(string _name, float _health, float _maxhealth, bool _isAlive, flo
     gun.setOrigin(Vector2f(4.f, -20.f));
     gun.setPosition(position);
 	
+    //collider
+    collider.setSize(Vector2f(40.f, 40.f));
+    collider.setFillColor(Color::Transparent);
+    collider.setOrigin(collider.getSize() / 2.f); 
+    collider.setPosition(position);
 	if (name == "nd")
 	{
 		GameException exception("Player", "Player name must be set");
@@ -41,21 +46,22 @@ Player::Player(string _name, float _health, float _maxhealth, bool _isAlive, flo
 void Player::handleInput()
 {
     if (isAlive) {
+        Vector2f moveOffset(Vector2f(0.f, 0.f));
         if (Keyboard::isKeyPressed(Keyboard::Key::W))
         {
-            position.y -= speed;
+            moveOffset.y -= speed;
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::S))
         {
-            position.y += speed;
+            moveOffset.y += speed;
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::A))
         {
-            position.x -= speed;
+            moveOffset.x -= speed;
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::D))
         {
-            position.x += speed;
+            moveOffset.x += speed;
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Left))
         {
@@ -67,6 +73,12 @@ void Player::handleInput()
             playerCircle.rotate(degrees(speed));
             gun.rotate(degrees(speed));
         }
+		if (moveOffset!=Vector2f(0.f,0.f))
+		{
+			lastMovement = moveOffset;
+			position += moveOffset;
+
+		}
     }
     if (Keyboard::isKeyPressed(Keyboard::Key::P))
     {
@@ -79,6 +91,7 @@ void Player::handleInput()
         position = Vector2f(initialPosition);
         playerCircle.setPosition(position);
         gun.setPosition(position);
+        collider.setPosition(position);
         playerCircle.setFillColor(Color(255, 220, 180));
 		playerCircle.setOutlineColor(Color::Black);
         gun.setOutlineColor(Color::Black);
@@ -91,8 +104,11 @@ void Player::move()
 {
     //sprite.setPosition(position);
     
-    if(isAlive) playerCircle.setPosition(position);
-	if(isAlive) gun.setPosition(position);
+    if (isAlive) {
+        playerCircle.setPosition(position);
+        gun.setPosition(position);
+        collider.setPosition(position);
+    }
 	
 }
 
@@ -104,6 +120,7 @@ void Player::draw(RenderWindow& window)
     
     window.draw(playerCircle);
     window.draw(gun);
+    window.draw(collider);
 
 }
 void Player::TakeDamage(float value)
@@ -133,6 +150,10 @@ void Player::TakeDamage(float value)
 		cout << "Player is dead!" << endl;
     }
 }
+void Player::goBack()
+{
+	position -= lastMovement;
+}
 Vector2f Player::getPlayerPosition()
 {
     return position;
@@ -153,7 +174,10 @@ void Player::set_name(string _name)
 {
     name = _name;
 }
-
+RectangleShape Player::getPlayerCollider()
+{
+	return collider;
+}
 char* Player::toStr()
 {
     sprintf_s(buff, "Player %s %.2f/%.2f is at position: %.2f, %.2f", name.c_str(), health, maxhealth, position.x, position.y);
