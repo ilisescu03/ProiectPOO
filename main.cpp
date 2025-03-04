@@ -2,8 +2,10 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
+#include <vector>
 #include "Player.h"
 #include "MapLimit.h"
+#include "Bullet.h"
 #include "GameException.h"
 using namespace std;
 using namespace sf;
@@ -22,6 +24,7 @@ int main()
 	limits[1] = &rightLimit;
 	limits[2] = &leftLimit;
 	limits[3] = &downLimit;
+	
     cout << "App is running..."<<endl;
     cout << player << endl;
     while (window.isOpen())
@@ -34,7 +37,6 @@ int main()
 		
 		player.handleInput();
 		player.move();
-		
 		for (int i = 0;i < 4;i++)
 		{
 			if (limits[i]->checkCollision(player))
@@ -42,6 +44,18 @@ int main()
 				player.goBack();
 			}
 		}
+		
+		/*
+		for (auto& bullet : bullets)
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				if (limits[i]->checkCollisionBullet(bullet))
+				{
+					bullet.Destroy(); // Mark the bullet as inactive
+				}
+			}
+		}*/
 		window.clear(Color(200, 200, 200));
 		
 		player.draw(window);

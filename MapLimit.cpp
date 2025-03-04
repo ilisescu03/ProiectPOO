@@ -4,6 +4,7 @@
 #include "Player.h"
 #include <iostream>
 #include <string>
+#include "Bullet.h"
 using namespace std;
 MapLimit::MapLimit(float x, float y, float width, float height)
 {
@@ -32,3 +33,8 @@ bool MapLimit::checkCollision(Player& player)
 
 
 }
+/*
+bool MapLimit::checkCollisionBullet(Bullet& bullet)
+{
+	
+}*/

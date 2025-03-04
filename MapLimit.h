@@ -13,6 +13,7 @@ public:
 	MapLimit(float x=0, float y=0, float width=0, float height=0);
 	void draw(RenderWindow& window);
 	bool checkCollision(Player& player);
+	//bool checkCollisionBullet(Bullet& bullet);
 	
 };
 

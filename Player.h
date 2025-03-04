@@ -2,7 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
-
+#include <vector>
+#include "Bullet.h"
 using namespace std;
 using namespace sf;
 
@@ -13,14 +14,19 @@ private:
     string path;
     float speed;
     float health;
+    float rotation;
     float maxhealth;
     bool isAlive;
+    Clock shootClock;
+    Bullet b;
+	vector <Bullet> bullets;
     Vector2f position;
     Vector2f lastMovement;
     Vector2f initialPosition;
     RectangleShape collider;
     CircleShape playerCircle;  
     RectangleShape gun; 
+	bool isShooting = false;
     char buff[250];
     
 
@@ -29,7 +35,11 @@ public:
     void TakeDamage(float value);
     void handleInput();
     void goBack();
+    float get_angle();
     bool get_state();
+	bool is_shooting();
+	void set_isShooting(bool value);
+    void shoot();
     void move();
     void draw(RenderWindow& window);
     Vector2f getPlayerPosition();

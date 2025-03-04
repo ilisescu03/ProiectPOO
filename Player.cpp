@@ -1,9 +1,11 @@
-#include "Player.h"
+﻿#include "Player.h"
 #include "GameException.h"
+#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
-
+#include "Bullet.h"
 using namespace std;
+using namespace sf;
 Player::Player(string _name, float _health, float _maxhealth, bool _isAlive, float x, float y, float _speed) : name(_name), speed(_speed), health(_health), maxhealth(_maxhealth), isAlive(_isAlive), position(Vector2f(x, y)), initialPosition(Vector2f(x, y)), lastMovement(Vector2f(x, y))
 {
    
@@ -17,7 +19,7 @@ Player::Player(string _name, float _health, float _maxhealth, bool _isAlive, flo
     playerCircle.setPosition(position);
     
     
-
+    bullets.push_back(b);
     //Gun
 	gun.setSize(Vector2f(8.f, 16.f));
     gun.setFillColor(Color(128, 128, 128));
@@ -31,6 +33,7 @@ Player::Player(string _name, float _health, float _maxhealth, bool _isAlive, flo
     collider.setFillColor(Color::Transparent);
     collider.setOrigin(collider.getSize() / 2.f); 
     collider.setPosition(position);
+    rotation = 0;
 	if (name == "nd")
 	{
 		GameException exception("Player", "Player name must be set");
@@ -67,11 +70,18 @@ void Player::handleInput()
         {
             playerCircle.rotate(degrees(-speed));
             gun.rotate(degrees(-speed));
+            rotation -= speed;
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Right))
         {
             playerCircle.rotate(degrees(speed));
             gun.rotate(degrees(speed));
+            rotation += speed;
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Key::Space))
+        {
+            shoot();
+			
         }
 		if (moveOffset!=Vector2f(0.f,0.f))
 		{
@@ -99,17 +109,41 @@ void Player::handleInput()
         cout << "Player respawned" << endl;
     }
 }
-
+void Player::set_isShooting(bool value)
+{
+	isShooting = value;
+}
+bool Player::is_shooting()
+{
+	return isShooting;
+}
+void Player::shoot()
+{
+    if (shootClock.getElapsedTime().asSeconds() >= 1) {
+        Bullet newBullet;
+        newBullet.set_position(position.x, position.y, rotation);
+        bullets.push_back(newBullet);
+    }
+}
 void Player::move()
 {
-    //sprite.setPosition(position);
-    
+    for (size_t i = 0; i < bullets.size();) {
+  
+        if (!bullets[i].get_state()) {
+            bullets.erase(bullets.begin() + i); 
+        }
+        else {
+            bullets[i].Update();
+            i++;
+      
+        }
+    }
+
     if (isAlive) {
         playerCircle.setPosition(position);
         gun.setPosition(position);
         collider.setPosition(position);
     }
-	
 }
 
 void Player::draw(RenderWindow& window)
@@ -117,7 +151,10 @@ void Player::draw(RenderWindow& window)
    // window.draw(sprite);
     
 
-    
+    for (size_t i = 0; i < bullets.size(); i++)
+    {
+        bullets[i].draw(window);
+    }
     window.draw(playerCircle);
     window.draw(gun);
     window.draw(collider);
@@ -158,7 +195,10 @@ Vector2f Player::getPlayerPosition()
 {
     return position;
 }
-
+float Player::get_angle()
+{
+	return rotation;
+}
 void Player::setPlayerPosition(float x, float y)
 {
     position = Vector2f(x, y);
