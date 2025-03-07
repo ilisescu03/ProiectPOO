@@ -11,7 +11,6 @@ class Player
 {
 private:
     string name;
-    string path;
     float speed;
     float health;
     float rotation;
@@ -48,6 +47,7 @@ public:
     string get_name();
     void set_name(string name);
     char* toStr();
+    Player& operator=(Player& player);
 	friend ostream& operator<<(ostream& out, Player& player);
 	
 };

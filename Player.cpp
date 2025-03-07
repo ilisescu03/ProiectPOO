@@ -78,9 +78,10 @@ void Player::handleInput()
             gun.rotate(degrees(speed));
             rotation += speed;
         }
-        if (Keyboard::isKeyPressed(Keyboard::Key::Space))
+        if (Keyboard::isKeyPressed(Keyboard::Key::Space)&& shootClock.getElapsedTime().asSeconds() > 1)
         {
             shoot();
+            shootClock.restart();
 			
         }
 		if (moveOffset!=Vector2f(0.f,0.f))
@@ -119,11 +120,12 @@ bool Player::is_shooting()
 }
 void Player::shoot()
 {
-    if (shootClock.getElapsedTime().asSeconds() >= 1) {
+    
         Bullet newBullet;
+        float rotationinrads=rotation* (3.14159265359f / 180.f);
         newBullet.set_position(position.x, position.y, rotation);
         bullets.push_back(newBullet);
-    }
+    
 }
 void Player::move()
 {
@@ -226,6 +228,17 @@ char* Player::toStr()
 bool Player::get_state()
 {
 	return isAlive;
+}
+Player& Player::operator=(Player& player)
+{
+    name = player.name;
+    speed = player.speed;
+    health = player.health;
+    maxhealth = player.maxhealth;
+    isAlive = player.isAlive;
+    
+    return *this;
+
 }
 ostream& operator<<(ostream& out, Player& player)
 {

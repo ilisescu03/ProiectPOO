@@ -7,7 +7,7 @@ using namespace std;
 using namespace sf;
 Bullet::Bullet() :currVelocity(0.f, 0.f), speed(10), damage(10), isActive(true), angle(0)
 {
-	bullet.setRadius(5.f);
+	bullet.setRadius(4.f);
 	bullet.setFillColor(Color::Yellow);
 	bullet.setOrigin(Vector2f(5.f, 5.f));
 	bullet.setPosition(Vector2f(0.f, 0.f));

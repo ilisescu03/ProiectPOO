@@ -33,6 +33,11 @@ bool MapLimit::checkCollision(Player& player)
 
 
 }
+MapLimit& MapLimit::operator=(MapLimit& _limit)
+{
+	limit = _limit.limit;
+	return *this;
+}
 /*
 bool MapLimit::checkCollisionBullet(Bullet& bullet)
 {
