@@ -42,8 +42,8 @@ void GameRun::Run()
 			if (event->is<Event::Closed>())
 				window->close();
 		}
-
-		player->handleInput();
+		player->Update();
+		player->handleInput(*window);
 		player->move();
 		for (int i = 0;i < 4;i++)
 		{

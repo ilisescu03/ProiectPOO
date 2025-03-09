@@ -45,8 +45,16 @@ Player::Player(string _name, float _health, float _maxhealth, bool _isAlive, flo
         exception.Print();
     }
 }
-
-void Player::handleInput()
+void Player::Update()
+{
+    if (isAlive && takesDamage && damageClock.getElapsedTime().asSeconds() >= 0.5f)
+    {
+        playerCircle.setFillColor(sf::Color(255, 220, 180));
+        gun.setFillColor(sf::Color(128, 128, 128));
+        takesDamage = false;
+    }
+}
+void Player::handleInput(RenderWindow& window)
 {
     if (isAlive) {
         Vector2f moveOffset(Vector2f(0.f, 0.f));
@@ -93,22 +101,44 @@ void Player::handleInput()
     }
     if (Keyboard::isKeyPressed(Keyboard::Key::P))
     {
-        TakeDamage(10);
+        if (canTakeDamage) 
+        {
+            TakeDamage(10);
+            canTakeDamage = false;
+        }
+    }
+    else {
+        canTakeDamage = true;
     }
     if (Keyboard::isKeyPressed(Keyboard::Key::R))
     {
-		health = maxhealth;
-        isAlive = true;
-        position = Vector2f(initialPosition);
-        playerCircle.setPosition(position);
-        gun.setPosition(position);
-        collider.setPosition(position);
-        playerCircle.setFillColor(Color(255, 220, 180));
-		playerCircle.setOutlineColor(Color::Black);
-        gun.setOutlineColor(Color::Black);
-        gun.setFillColor(Color(128, 128, 128));
-        cout << "Player respawned" << endl;
+        Respawn();
     }
+    if (Keyboard::isKeyPressed(Keyboard::Key::L))
+    {
+        IncreaseScore(25);
+    }
+}
+void Player::IncreaseScore(int value)
+{
+    score += value;
+    if (score > highScore) highScore = score;
+    cout << "Score increased!" << endl;
+}
+void Player::Respawn()
+{
+    health = maxhealth;
+    isAlive = true;
+    position = Vector2f(initialPosition);
+    playerCircle.setPosition(position);
+    gun.setPosition(position);
+    collider.setPosition(position);
+    playerCircle.setFillColor(Color(255, 220, 180));
+    playerCircle.setOutlineColor(Color::Black);
+    gun.setOutlineColor(Color::Black);
+    gun.setFillColor(Color(128, 128, 128));
+    score = 0;
+    cout << "Player respawned" << endl;
 }
 void Player::set_isShooting(bool value)
 {
@@ -167,27 +197,29 @@ void Player::TakeDamage(float value)
     cout << "Player takes damage!" << endl;
 	health -= value;
     playerCircle.setFillColor(Color::Red);
-	gun.setFillColor(Color::Red);
-    Clock clock;
-    while (clock.getElapsedTime().asSeconds() < 1.f)
-    {
-        // Wait for 2 seconds
-    }
-    playerCircle.setFillColor(Color(255, 220, 180));
-	gun.setFillColor(Color(128, 128, 128));
+    gun.setFillColor(Color(139, 0, 0));
+    
+    takesDamage = true;
+    damageClock.restart();
+
 	if (health < 0)
 	{
 		health = 0;
 	}
     if (health == 0) 
     {
-        playerCircle.setFillColor(Color::Transparent);
-        gun.setFillColor(Color::Transparent);
-		playerCircle.setOutlineColor(Color::Transparent);
-		gun.setOutlineColor(Color::Transparent);
-		isAlive = false;
-		cout << "Player is dead!" << endl;
+        Die();
     }
+}
+void Player::Die()
+{
+    playerCircle.setFillColor(Color::Transparent);
+    gun.setFillColor(Color::Transparent);
+    playerCircle.setOutlineColor(Color::Transparent);
+    gun.setOutlineColor(Color::Transparent);
+    isAlive = false;
+    cout << "Player is dead!" << endl;
+    cout << "Your score:" << score << "     Your high score:" << highScore << endl;
 }
 void Player::goBack()
 {
