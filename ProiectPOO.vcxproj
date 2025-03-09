@@ -138,6 +138,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="GameException.cpp" />
     <ClCompile Include="GameRun.cpp" />
+    <ClCompile Include="HealthBar.cpp" />
     <ClCompile Include="MapLimit.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="main.cpp" />
@@ -146,6 +147,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="GameException.h" />
     <ClInclude Include="GameRun.h" />
+    <ClInclude Include="HealthBar.h" />
     <ClInclude Include="MapLimit.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>

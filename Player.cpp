@@ -140,6 +140,14 @@ void Player::Respawn()
     score = 0;
     cout << "Player respawned" << endl;
 }
+float Player :: getHealth()
+{
+    return health;
+}
+float Player :: getMaxHealth()
+{
+    return maxhealth;
+}
 void Player::set_isShooting(bool value)
 {
 	isShooting = value;

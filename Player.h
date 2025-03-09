@@ -36,6 +36,8 @@ private:
 
 public:
     Player(string _name="nd", float _health=100, float _maxhealth=100, bool _isAlive=true, float x = 0, float y = 0, float _speed = 0);
+    float getHealth();
+    float getMaxHealth();
     void TakeDamage(float value);
     void Update();
     void Respawn();

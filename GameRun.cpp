@@ -7,14 +7,15 @@
 #include "MapLimit.h"
 #include "Bullet.h"
 #include "GameException.h"
+#include "HealthBar.h";
 using namespace std;
 using namespace sf;
 GameRun::GameRun()
 {
 	window = new RenderWindow(VideoMode({ 1366, 768 }), "Zombie Invasion Survival");
 	player = new Player("Aditzuu", 100.f, 100.f, true, 100.f, 100.f, 2.f);
-	
-	
+	healthbar = new HealthBar(1366, 768);
+
 	
 	MapLimit rightLimit(1350, 0, 20, 768);
 	limits[0] = new MapLimit (0, 0, 1366, 20);
@@ -66,8 +67,9 @@ void GameRun::Run()
 		}
 		*/
 		window->clear(Color(200, 200, 200));
-
+		healthbar->Update(player->getHealth(), player->getMaxHealth());
 		player->draw(*window);
+		healthbar->draw(*window);
 		for (int i = 0;i < 4;i++)
 		{
 			limits[i]->draw(*window);

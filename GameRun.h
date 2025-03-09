@@ -7,12 +7,14 @@
 #include "MapLimit.h"
 #include "Bullet.h"
 #include "GameException.h"
+#include "HealthBar.h"
 using namespace std;
 using namespace sf;
 class GameRun
 {
 	RenderWindow * window;
 	Player * player;
+	HealthBar * healthbar;
 	MapLimit *limits[4];
 
 public:
