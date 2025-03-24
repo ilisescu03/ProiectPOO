@@ -8,6 +8,7 @@
 #include "Bullet.h"
 #include "GameException.h"
 #include "HealthBar.h"
+#include "Enemy.h"
 using namespace std;
 using namespace sf;
 class GameRun
@@ -16,7 +17,8 @@ class GameRun
 	Player * player;
 	HealthBar * healthbar;
 	MapLimit *limits[4];
-
+	Enemy * enemy;
+	vector<Enemy*> enemies;
 public:
 	GameRun();
 	~GameRun();

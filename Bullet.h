@@ -26,6 +26,7 @@ public:
 	void draw(RenderWindow& window);
 	void Destroy();
 	bool get_state();
+	float GetRadius();
 	Vector2f GetPosition();
 
 };

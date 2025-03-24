@@ -6,10 +6,11 @@
 #include "Bullet.h"
 using namespace std;
 using namespace sf;
+
 Player::Player(string _name, float _health, float _maxhealth, bool _isAlive, float x, float y, float _speed) : name(_name), speed(_speed), health(_health), maxhealth(_maxhealth), isAlive(_isAlive), position(Vector2f(x, y)), initialPosition(Vector2f(x, y)), lastMovement(Vector2f(x, y))
 {
-   
-   
+
+
     //playerCircle
     playerCircle.setRadius(20.f);
     playerCircle.setFillColor(Color(255, 220, 180));
@@ -279,6 +280,9 @@ Player& Player::operator=(Player& player)
     
     return *this;
 
+}
+std::vector<Bullet>& Player::getBullets() {
+    return bullets;
 }
 ostream& operator<<(ostream& out, Player& player)
 {

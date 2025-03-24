@@ -64,3 +64,7 @@ Vector2f Bullet::GetPosition()
 {
 	return Vector2f(bullet.getPosition());
 }
+float Bullet::GetRadius()
+{
+	return bullet.getRadius();
+}

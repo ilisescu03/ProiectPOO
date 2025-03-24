@@ -16,6 +16,7 @@ private:
     float rotation;
     float maxhealth;
     bool isAlive;
+
     Clock shootClock;
     Clock damageClock;
     Bullet b;
@@ -43,6 +44,7 @@ public:
     void Respawn();
     void IncreaseScore(int value);
     void Die();
+    vector<Bullet>& getBullets();
     void handleInput(RenderWindow& window);
     void goBack();
     float get_angle();
