@@ -45,6 +45,7 @@ Player::Player(string _name, float _health, float _maxhealth, bool _isAlive, flo
         GameException exception("Player", "Player speed must be greater than 0");
         exception.Print();
     }
+    canTakeDamage = true;
 }
 void Player::Update()
 {
@@ -204,21 +205,26 @@ void Player::draw(RenderWindow& window)
 void Player::TakeDamage(float value)
 {
     cout << "Player takes damage!" << endl;
-	health -= value;
-    playerCircle.setFillColor(Color::Red);
-    gun.setFillColor(Color(139, 0, 0));
-    
-    takesDamage = true;
-    damageClock.restart();
+    if (canTakeDamage) {
+        health -= value;
+        canTakeDamage = false;
+        damageCooldownClock.restart();
+        playerCircle.setFillColor(Color::Red);
+        gun.setFillColor(Color(139, 0, 0));
 
-	if (health < 0)
-	{
-		health = 0;
-	}
-    if (health == 0) 
-    {
-        Die();
+        takesDamage = true;
+        damageClock.restart();
+
+        if (health < 0)
+        {
+            health = 0;
+        }
+        if (health == 0)
+        {
+            Die();
+        }
     }
+    
 }
 void Player::Die()
 {
@@ -247,7 +253,14 @@ void Player::setPlayerPosition(float x, float y)
     position = Vector2f(x, y);
     move();
 }
-
+bool Player::getCanTakeDamage()
+{
+    return canTakeDamage;
+}
+void Player::setCanTakeDamage(bool value)
+{
+    canTakeDamage = value;
+}
 string Player::get_name()
 {
     return name;
@@ -269,6 +282,10 @@ char* Player::toStr()
 bool Player::get_state()
 {
 	return isAlive;
+}
+float Player::getCircleRadius()
+{
+    return playerCircle.getRadius();
 }
 Player& Player::operator=(Player& player)
 {

@@ -66,6 +66,7 @@ void Enemy::Die()
 }
 void Enemy::Update(Player &player)
 {
+  
     if (!isDead && takesDamage && damageClock.getElapsedTime().asSeconds() >= 0.5f)
     {
         EnemyCircle.setFillColor(Color(48, 87, 36));
@@ -73,9 +74,23 @@ void Enemy::Update(Player &player)
         LeftHand.setFillColor(Color(48, 87, 36));
         takesDamage = false;
     }
-    Move(player);
+    if (CollidesWPlayer(player)) {
+        if (player.getCanTakeDamage() && attackCooldown.getElapsedTime().asSeconds() >= 1.5f) {
+            player.TakeDamage(10);
+            attackCooldown.restart();
+            player.setCanTakeDamage(false);
+        }
+    }
+    else {
+        Move(player);
+        player.setCanTakeDamage(true);
+    }
+    
 }
+void Enemy::goBack()
+{
 
+}
 void Enemy::Move(Player& player)
 {
     Vector2f direction = player.getPlayerPosition() - EnemyCircle.getPosition();
@@ -112,4 +127,10 @@ bool Enemy::Collides(Bullet& bullet) {
     float distance = sqrt(pow(bullet.GetPosition().x - EnemyCircle.getPosition().x, 2) +
         pow(bullet.GetPosition().y - EnemyCircle.getPosition().y, 2));
     return distance < (bullet.GetRadius() + EnemyCircle.getRadius());
+}
+bool Enemy::CollidesWPlayer(Player& player)
+{
+    float distance = sqrt(pow(player.getPlayerPosition().x - EnemyCircle.getPosition().x, 2) +
+        pow(player.getPlayerPosition().y - EnemyCircle.getPosition().y, 2));
+    return distance < (player.getCircleRadius() + EnemyCircle.getRadius());
 }

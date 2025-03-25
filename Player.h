@@ -29,7 +29,8 @@ private:
     RectangleShape gun; 
 	bool isShooting = false;
     bool takesDamage = false;
-    bool canTakeDamage = true;
+    bool canTakeDamage;
+    Clock damageCooldownClock;
     int score = 0;
     int highScore = 0;
     char buff[250];
@@ -37,6 +38,8 @@ private:
 
 public:
     Player(string _name="nd", float _health=100, float _maxhealth=100, bool _isAlive=true, float x = 0, float y = 0, float _speed = 0);
+    bool getCanTakeDamage();
+    void setCanTakeDamage(bool value);
     float getHealth();
     float getMaxHealth();
     void TakeDamage(float value);
@@ -53,6 +56,7 @@ public:
 	void set_isShooting(bool value);
     void shoot();
     void move();
+    float getCircleRadius();
     void draw(RenderWindow& window);
     Vector2f getPlayerPosition();
 	RectangleShape getPlayerCollider();

@@ -14,6 +14,8 @@ private:
 	RectangleShape LeftHand;
 	RectangleShape RightHand;
 	Clock damageClock;
+	Clock attackCooldown;
+	
 	bool takesDamage=false;
 	bool isDead = false;
 	float health;
@@ -22,7 +24,9 @@ private:
 public:
 	Enemy();
 	bool Collides(Bullet & bullet);
+	bool CollidesWPlayer(Player &player);
 	bool GetState();
+	void goBack();
 	void Update(Player &player);
 	void Move(Player &player);
 	void Draw(RenderWindow &window);

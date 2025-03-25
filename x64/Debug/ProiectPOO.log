@@ -6,7 +6,8 @@ E:\External\include\SFML\System\Exception.hpp(41,47): warning C4275: non dll-int
       E:\External\include\SFML\System\Exception.hpp(41,23):
       see declaration of 'sf::Exception'
   
-E:\ProiectPOO\ProiectPOO\Enemy.cpp(87,48): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-E:\ProiectPOO\ProiectPOO\Enemy.cpp(90,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-E:\ProiectPOO\ProiectPOO\Enemy.cpp(112,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\ProiectPOO\ProiectPOO\Enemy.cpp(102,48): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+E:\ProiectPOO\ProiectPOO\Enemy.cpp(105,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\ProiectPOO\ProiectPOO\Enemy.cpp(127,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+E:\ProiectPOO\ProiectPOO\Enemy.cpp(133,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
   ProiectPOO.vcxproj -> E:\ProiectPOO\x64\Debug\ProiectPOO.exe
