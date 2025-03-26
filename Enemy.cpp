@@ -1,5 +1,5 @@
 ﻿#include "Enemy.h"
-Enemy::Enemy(float x, float y)
+Enemy::Enemy(float x, float y) :Character(x, y, 25, 1.0f, 0.0f)
 {
     Position = Vector2f(x, y);
     // Configurare corp (EnemyCircle)
@@ -26,7 +26,7 @@ Enemy::Enemy(float x, float y)
     RightHand.setOrigin(Vector2f(8.f, 3.f));
     RightHand.setPosition(EnemyCircle.getPosition() + Vector2f(18.f, 10.f)); // Lângă corp, spre dreapta
 
-    health = 50;
+    health = 25;
     speed = 1.0f;
     angle = 0.0f;
 }
@@ -67,7 +67,7 @@ void Enemy::Die()
 }
 void Enemy::Update(Player &player)
 {
-  
+    
     if (!isDead && takesDamage && damageClock.getElapsedTime().asSeconds() >= 0.5f)
     {
         EnemyCircle.setFillColor(Color(48, 87, 36));

@@ -5,9 +5,10 @@
 #include <vector>
 #include "Bullet.h"
 #include "Player.h"
+#include "Character.h"
 using namespace std;
 using namespace sf;
-class Enemy
+class Enemy : public Character
 {
 private:
 	CircleShape EnemyCircle;
@@ -15,12 +16,8 @@ private:
 	RectangleShape RightHand;
 	Clock damageClock;
 	Clock attackCooldown;
-	Vector2f Position;
-	bool takesDamage=false;
-	bool isDead = false;
-	float health;
-	float speed;
-	float angle;
+
+	
 public:
 	Enemy(float x = 0.f, float y = 0.f);
 	bool Collides(Bullet & bullet);

@@ -6,46 +6,47 @@
 #include "Bullet.h"
 using namespace std;
 using namespace sf;
-
-Player::Player(string _name, float _health, float _maxhealth, bool _isAlive, float x, float y, float _speed) : name(_name), speed(_speed), health(_health), maxhealth(_maxhealth), isAlive(_isAlive), position(Vector2f(x, y)), initialPosition(Vector2f(x, y)), lastMovement(Vector2f(x, y))
+Player::Player(string _name, float _health, float _maxhealth, bool _isAlive, float x, float y, float _speed) : Character(x, y, _health, _speed, 0)
 {
-
-
-    //playerCircle
-    playerCircle.setRadius(20.f);
-    playerCircle.setFillColor(Color(255, 220, 180));
-    playerCircle.setOutlineColor(Color::Black);
-    playerCircle.setOutlineThickness(2.f);
-    playerCircle.setOrigin(Vector2f(20.f, 20.f));
-    playerCircle.setPosition(position);
-    
-    
-    bullets.push_back(b);
-    //Gun
+	//playerCircle
+	playerCircle.setRadius(20.f);
+	playerCircle.setFillColor(Color(255, 220, 180));
+	playerCircle.setOutlineColor(Color::Black);
+	playerCircle.setOutlineThickness(2.f);
+	playerCircle.setOrigin(Vector2f(20.f, 20.f));
+	playerCircle.setPosition(Position);
+    initialPosition = Position;
+    health = _health;
+	maxhealth = _maxhealth;
+	isAlive = _isAlive;
+    isDead = false;
+    takesDamage = false;
+	name = _name;
+	//Gun
 	gun.setSize(Vector2f(8.f, 16.f));
-    gun.setFillColor(Color(128, 128, 128));
-    gun.setOutlineColor(Color::Black);
+	gun.setFillColor(Color(128, 128, 128));
+	gun.setOutlineColor(Color::Black);
 	gun.setOutlineThickness(2.f);
-    gun.setOrigin(Vector2f(4.f, -20.f));
-    gun.setPosition(position);
-	
-    //collider
-    collider.setSize(Vector2f(40.f, 40.f));
-    collider.setFillColor(Color::Transparent);
-    collider.setOrigin(collider.getSize() / 2.f); 
-    collider.setPosition(position);
-    rotation = 0;
-	if (name == "nd")
+	gun.setOrigin(Vector2f(4.f, -20.f));
+	gun.setPosition(Position);
+
+	//collider
+	collider.setSize(Vector2f(40.f, 40.f));
+	collider.setFillColor(Color::Transparent);
+	collider.setOrigin(collider.getSize() / 2.f);
+	collider.setPosition(Position);
+	angle = 0;
+	if (_name == "nd")
 	{
 		GameException exception("Player", "Player name must be set");
 		exception.Print();
 	}
-    if (speed <= 0)
-    {
-        GameException exception("Player", "Player speed must be greater than 0");
-        exception.Print();
-    }
-    canTakeDamage = true;
+	if (_speed <= 0)
+	{
+		GameException exception("Player", "Player speed must be greater than 0");
+		exception.Print();
+	}
+	canTakeDamage = true;
 }
 void Player::Update()
 {
@@ -80,13 +81,13 @@ void Player::handleInput(RenderWindow& window)
         {
             playerCircle.rotate(degrees(-speed));
             gun.rotate(degrees(-speed));
-            rotation -= speed;
+            angle -= speed;
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Right))
         {
             playerCircle.rotate(degrees(speed));
             gun.rotate(degrees(speed));
-            rotation += speed;
+            angle += speed;
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Space)&& shootClock.getElapsedTime().asSeconds() > 1)
         {
@@ -97,7 +98,7 @@ void Player::handleInput(RenderWindow& window)
 		if (moveOffset!=Vector2f(0.f,0.f))
 		{
 			lastMovement = moveOffset;
-			position += moveOffset;
+			Position += moveOffset;
 
 		}
     }
@@ -131,10 +132,10 @@ void Player::Respawn()
 {
     health = maxhealth;
     isAlive = true;
-    position = Vector2f(initialPosition);
-    playerCircle.setPosition(position);
-    gun.setPosition(position);
-    collider.setPosition(position);
+    Position = Vector2f(initialPosition);
+    playerCircle.setPosition(Position);
+    gun.setPosition(Position);
+    collider.setPosition(Position);
     playerCircle.setFillColor(Color(255, 220, 180));
     playerCircle.setOutlineColor(Color::Black);
     gun.setOutlineColor(Color::Black);
@@ -162,8 +163,8 @@ void Player::shoot()
 {
     
         Bullet newBullet;
-        float rotationinrads=rotation* (3.14159265359f / 180.f);
-        newBullet.set_position(position.x, position.y, rotation);
+        float rotationinrads=angle* (3.14159265359f / 180.f);
+        newBullet.set_position(Position.x, Position.y, angle);
         bullets.push_back(newBullet);
     
 }
@@ -182,9 +183,9 @@ void Player::move()
     }
 
     if (isAlive) {
-        playerCircle.setPosition(position);
-        gun.setPosition(position);
-        collider.setPosition(position);
+        playerCircle.setPosition(Position);
+        gun.setPosition(Position);
+        collider.setPosition(Position);
     }
 }
 
@@ -238,19 +239,19 @@ void Player::Die()
 }
 void Player::goBack()
 {
-	position -= lastMovement;
+    Position -= lastMovement;
 }
 Vector2f Player::getPlayerPosition()
 {
-    return position;
+    return Position;
 }
 float Player::get_angle()
 {
-	return rotation;
+	return angle;
 }
 void Player::setPlayerPosition(float x, float y)
 {
-    position = Vector2f(x, y);
+    Position = Vector2f(x, y);
     move();
 }
 bool Player::getCanTakeDamage()
@@ -276,7 +277,7 @@ RectangleShape Player::getPlayerCollider()
 }
 char* Player::toStr()
 {
-    sprintf_s(buff, "Player %s %.2f/%.2f is at position: %.2f, %.2f", name.c_str(), health, maxhealth, position.x, position.y);
+    sprintf_s(buff, "Player %s %.2f/%.2f is at position: %.2f, %.2f", name.c_str(), health, maxhealth, Position.x, Position.y);
     return buff;
 }
 bool Player::get_state()

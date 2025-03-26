@@ -136,6 +136,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Character.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemySpawner.cpp" />
     <ClCompile Include="GameException.cpp" />
@@ -147,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Character.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemySpawner.h" />
     <ClInclude Include="GameException.h" />
@@ -154,6 +156,10 @@
     <ClInclude Include="HealthBar.h" />
     <ClInclude Include="MapLimit.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ProiectPOO.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

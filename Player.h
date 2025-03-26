@@ -4,32 +4,30 @@
 #include <string>
 #include <vector>
 #include "Bullet.h"
+#include "Character.h"
 using namespace std;
 using namespace sf;
 
-class Player
+class Player : public Character
 {
 private:
     string name;
-    float speed;
-    float health;
-    float rotation;
+    
     float maxhealth;
-    bool isAlive;
+   
 
     Clock shootClock;
     Clock damageClock;
     Bullet b;
 	vector <Bullet> bullets;
-    Vector2f position;
+   
     Vector2f lastMovement;
     Vector2f initialPosition;
     RectangleShape collider;
     CircleShape playerCircle;  
     RectangleShape gun; 
 	bool isShooting = false;
-    bool takesDamage = false;
-    bool canTakeDamage;
+  
     Clock damageCooldownClock;
     int score = 0;
     int highScore = 0;

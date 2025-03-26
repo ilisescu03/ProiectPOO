@@ -10,6 +10,7 @@
 #include "HealthBar.h"
 #include "Enemy.h"
 #include "EnemySpawner.h"
+#include "Character.h"
 using namespace std;
 using namespace sf;
 class GameRun

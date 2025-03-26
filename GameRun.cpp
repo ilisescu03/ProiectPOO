@@ -7,7 +7,8 @@
 #include "MapLimit.h"
 #include "Bullet.h"
 #include "GameException.h"
-#include "HealthBar.h";
+#include "HealthBar.h"
+#include "Character.h"
 #include "EnemySpawner.h"
 using namespace std;
 using namespace sf;

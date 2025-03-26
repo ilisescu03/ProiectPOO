@@ -1,4 +1,5 @@
 #include "EnemySpawner.h"  
+#include <random>
 #include <vector>  
 #include <iostream>  
 #include "Enemy.h"  
@@ -14,13 +15,14 @@ void EnemySpawner::Update(Player &player, RenderWindow& window)
 	if (SpawnClock.getElapsedTime().asSeconds() >= spawnTime)
 	{
 		SpawnClock.restart();
-		enemies.push_back(Enemy(500.f, 300.f));
+		enemies.push_back(Enemy(getRandomX(), getRandomY()));
 	}
     for (auto it = enemies.begin(); it != enemies.end();)
     {
         if (it->GetState())
         {
             it = enemies.erase(it); // Remove from the list
+            player.IncreaseScore(25);
         }
         else
         {
@@ -42,11 +44,18 @@ void EnemySpawner::Update(Player &player, RenderWindow& window)
 }  
 float EnemySpawner::getRandomX()  
 {  
-   return 0;  
+    random_device rd;
+	mt19937 gen(rd());
+	uniform_real_distribution<float> distrib(0.f, 1366.f);
+	return distrib(gen);
+   
 }  
 float EnemySpawner::getRandomY()  
 {  
-   return 0;  
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_real_distribution<float> distrib(0.f, 768.f);
+    return distrib(gen);
 }
 void EnemySpawner::ClearVector()
 {
