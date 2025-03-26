@@ -15,14 +15,14 @@ private:
 	RectangleShape RightHand;
 	Clock damageClock;
 	Clock attackCooldown;
-	
+	Vector2f Position;
 	bool takesDamage=false;
 	bool isDead = false;
 	float health;
 	float speed;
 	float angle;
 public:
-	Enemy();
+	Enemy(float x = 0.f, float y = 0.f);
 	bool Collides(Bullet & bullet);
 	bool CollidesWPlayer(Player &player);
 	bool GetState();

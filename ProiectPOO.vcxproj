@@ -137,6 +137,7 @@
   <ItemGroup>
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemySpawner.cpp" />
     <ClCompile Include="GameException.cpp" />
     <ClCompile Include="GameRun.cpp" />
     <ClCompile Include="HealthBar.cpp" />
@@ -147,6 +148,7 @@
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemySpawner.h" />
     <ClInclude Include="GameException.h" />
     <ClInclude Include="GameRun.h" />
     <ClInclude Include="HealthBar.h" />

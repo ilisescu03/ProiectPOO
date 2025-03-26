@@ -1,13 +1,14 @@
 ﻿#include "Enemy.h"
-Enemy::Enemy()
+Enemy::Enemy(float x, float y)
 {
+    Position = Vector2f(x, y);
     // Configurare corp (EnemyCircle)
     EnemyCircle.setRadius(20.f);
     EnemyCircle.setFillColor(Color(48, 87, 36));
     EnemyCircle.setOutlineColor(Color::Black);
     EnemyCircle.setOutlineThickness(2.f);
     EnemyCircle.setOrigin(Vector2f(20.f, 20.f));
-    EnemyCircle.setPosition(Vector2f(500.f, 400.f)); // Poziție inițială (o poți modifica)
+    EnemyCircle.setPosition(Position); // Poziție inițială (o poți modifica)
 
     // Configurare mână stângă (LeftHand)
     LeftHand.setSize(Vector2f(16.f, 6.f));  // Dimensiune mai mică decât arma
