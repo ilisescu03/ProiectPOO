@@ -11,7 +11,7 @@ private:
 	RectangleShape BarFill;
 public:
 	HealthBar(float screenWidth=0, float screenHeight=0);
-	void Update(float health, float maxHealth);
+	void Update(RenderWindow& window, float health, float maxHealth);
 	void draw(RenderWindow& window);
 };
 

@@ -30,13 +30,14 @@ HealthBar::HealthBar(float screenWidth, float screenHeight)
     BarFill.setOrigin(Vector2f(0.f, 0.f));
 }
 
-void HealthBar::Update(float health, float maxHealth)
+void HealthBar::Update(RenderWindow& window, float health, float maxHealth)
 {
     float healthPercent = health / maxHealth;
     healthPercent = std::max(0.f, std::min(1.f, healthPercent)); 
 
 
     BarFill.setScale(Vector2f(healthPercent, 1.f));
+    draw(window);
 }
 
 void HealthBar::draw(RenderWindow& window)

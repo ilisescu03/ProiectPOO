@@ -27,7 +27,7 @@ Enemy::Enemy(float x, float y) :Character(x, y, 25, 1.0f, 0.0f)
     RightHand.setPosition(EnemyCircle.getPosition() + Vector2f(18.f, 10.f)); // Lângă corp, spre dreapta
 
     health = 25;
-    speed = 1.0f;
+    speed = 1.3f;
     angle = 0.0f;
 }
 void Enemy::Draw(RenderWindow& window)

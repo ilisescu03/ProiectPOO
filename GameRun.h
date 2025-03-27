@@ -11,14 +11,16 @@
 #include "Enemy.h"
 #include "EnemySpawner.h"
 #include "Character.h"
+#include "GameHUD.h"
 using namespace std;
 using namespace sf;
 class GameRun
 {
+	GameHUD* gameHUD;
 	EnemySpawner * enemySpawner;
 	RenderWindow * window;
 	Player * player;
-	HealthBar * healthbar;
+
 	MapLimit *limits[4];
 
 public:
