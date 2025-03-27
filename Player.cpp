@@ -159,6 +159,14 @@ bool Player::is_shooting()
 {
 	return isShooting;
 }
+int Player::getScore()
+{
+    return score;
+}
+int Player::getHighScore()
+{
+	return highScore;
+}
 void Player::shoot()
 {
     

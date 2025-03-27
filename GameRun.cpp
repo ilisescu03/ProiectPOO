@@ -40,6 +40,22 @@ GameRun::~GameRun()
 	}
 }
 void GameRun::Run() {
+    Font font;
+	if (!font.openFromFile("Pixeboy-z8XGD.ttf")) 
+    {
+		throw GameException("Font not found");
+	}
+    Text ScoreText(font);
+	ScoreText.setCharacterSize(30);
+	ScoreText.setFillColor(Color::Black);
+	ScoreText.setPosition(Vector2f(10.f, 728.f));
+	ScoreText.setString("Score: 0");
+
+	Text HighScoreText(font);
+	HighScoreText.setCharacterSize(30);
+	HighScoreText.setFillColor(Color::Black);
+	HighScoreText.setPosition(Vector2f(10.f, 688.f));
+	HighScoreText.setString("High score: 0");
     while (window->isOpen()) {
         while (const optional event = window->pollEvent()) {
             if (event->is<Event::Closed>())
@@ -53,11 +69,15 @@ void GameRun::Run() {
                 player->goBack();
             }
         }
-
+		ScoreText.setString("Score:" + to_string(player->getScore()));
+		HighScoreText.setString("High score:" + to_string(player->getHighScore()));
+		
         window->clear(Color(200, 200, 200));
         healthbar->Update(player->getHealth(), player->getMaxHealth());
-        player->draw(*window);
 
+        player->draw(*window);
+		window->draw(ScoreText);
+		window->draw(HighScoreText);
 		enemySpawner->Update(*player, *window);
 
         healthbar->draw(*window);
