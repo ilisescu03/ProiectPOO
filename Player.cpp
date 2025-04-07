@@ -52,6 +52,7 @@ Player::Player(string _name, float _health, float _maxhealth, bool _isAlive, flo
 }
 void Player::Update()
 {
+    
     if (isAlive && takesDamage && damageClock.getElapsedTime().asSeconds() >= 0.5f)
     {
         CurrentFrame.setColor(sf::Color(255, 220, 180));
@@ -61,50 +62,70 @@ void Player::Update()
 }
 void Player::handleInput(RenderWindow& window)
 {
+    static int counter = 1; // Static counter to keep track of the message number
+
     if (isAlive) {
         Vector2f moveOffset(Vector2f(0.f, 0.f));
+        bool isMoving = false;
+
         if (Keyboard::isKeyPressed(Keyboard::Key::W))
         {
             moveOffset.y -= speed;
+            isMoving = true;
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::S))
         {
             moveOffset.y += speed;
+            isMoving = true;
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::A))
         {
             moveOffset.x -= speed;
+            isMoving = true;
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::D))
         {
             moveOffset.x += speed;
+            isMoving = true;
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Left))
         {
-			CurrentFrame.rotate(-degrees(speed));
+            CurrentFrame.rotate(-degrees(speed));
             angle -= speed;
+            isMoving = true;
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Right))
         {
-			CurrentFrame.rotate(degrees(speed));
+            CurrentFrame.rotate(degrees(speed));
             angle += speed;
+            isMoving = true;
         }
-        if (Keyboard::isKeyPressed(Keyboard::Key::Space)&& shootClock.getElapsedTime().asSeconds() > 1)
+        if (Keyboard::isKeyPressed(Keyboard::Key::Space) && shootClock.getElapsedTime().asSeconds() > 1)
         {
             shoot();
             shootClock.restart();
-			
         }
-		if (moveOffset!=Vector2f(0.f,0.f))
-		{
-			lastMovement = moveOffset;
-			Position += moveOffset;
 
-		}
+        if (isMoving)
+        {
+            cout << "Player ul se deplaseaza " << counter << endl;
+            counter++;
+            if (counter > 6)
+            {
+                counter = 1;
+            }
+
+            if (moveOffset != Vector2f(0.f, 0.f))
+            {
+                lastMovement = moveOffset;
+                Position += moveOffset;
+            }
+        }
     }
+
     if (Keyboard::isKeyPressed(Keyboard::Key::P))
     {
-        if (canTakeDamage) 
+        if (canTakeDamage)
         {
             TakeDamage(10);
             canTakeDamage = false;
@@ -161,6 +182,7 @@ void Player::set_isShooting(bool value)
 {
 	isShooting = value;
 }
+
 bool Player::is_shooting()
 {
 	return isShooting;

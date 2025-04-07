@@ -42,6 +42,7 @@ public:
     bool getCanTakeDamage();
     void setCanTakeDamage(bool value);
     int getScore();
+    
     int getHighScore();
     int getScoreCount();
     void ResetScoreCount();
