@@ -17,6 +17,7 @@ using namespace sf;
 GameRun::GameRun()
 {
 	window = new RenderWindow(VideoMode::getDesktopMode(), "Zombie Invasion Survival");
+	
 	player = new Player("Aditzuu", 100.f, 100.f, true, 100.f, 100.f, 2.f);
 	enemySpawner = new EnemySpawner();
 	gameHUD = new GameHUD();
@@ -43,8 +44,9 @@ GameRun::~GameRun()
 	}
 }
 void GameRun::Run() {
+	
     Font font;
-	if (!font.openFromFile("Pixeboy-z8XGD.ttf")) 
+	if (!font.openFromFile("E:\\ProiectPOO\\ProiectPOO\\Pixeboy-z8XGD.ttf")) 
     {
 		throw GameException("Font not found");
 	}
@@ -52,19 +54,25 @@ void GameRun::Run() {
 	const float frameTime = 1.0f / targetFPS;
     Text ScoreText(font);
 	ScoreText.setCharacterSize(50);
-	ScoreText.setFillColor(Color::Black);
+	ScoreText.setFillColor(Color::White);
+	ScoreText.setOutlineColor(Color::Black);
+	ScoreText.setOutlineThickness(2.f);
 	ScoreText.setPosition(Vector2f(15.f, 710.f));
 	ScoreText.setString("Score: 0");
 
 	Text HighScoreText(font);
 	HighScoreText.setCharacterSize(50);
-	HighScoreText.setFillColor(Color::Black);
+	HighScoreText.setFillColor(Color::White);
+	HighScoreText.setOutlineColor(Color::Black);
+	HighScoreText.setOutlineThickness(2.f);
 	HighScoreText.setPosition(Vector2f(15.f, 660.f));
 	HighScoreText.setString("High score: 0");
 
 	Text TimerText(font);
 	TimerText.setCharacterSize(50);
-	TimerText.setFillColor(Color::Black);
+	TimerText.setFillColor(Color::White);
+	TimerText.setOutlineColor(Color::Black);
+	TimerText.setOutlineThickness(2.f);
 	TimerText.setPosition(Vector2f(683.f, 10.f));
 	TimerText.setString("0:00");
 	Clock clock;
@@ -73,7 +81,16 @@ void GameRun::Run() {
 		Time elapsed = clock.restart();
 		float deltaTime = elapsed.asSeconds();
 		if (player->get_state()) totalTime += deltaTime;
-		else totalTime = 0.f;
+		else {
+			totalTime = 0.f;
+			enemySpawner->ResetTime();
+		}
+		if (player->getScoreCount() > 65
+			) 
+		{ 
+		player->ResetScoreCount();
+		enemySpawner->DecreaseTime();
+		}
         while (const optional event = window->pollEvent()) {
             if (event->is<Event::Closed>())
                 window->close();

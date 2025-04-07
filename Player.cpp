@@ -6,15 +6,17 @@
 #include "Bullet.h"
 using namespace std;
 using namespace sf;
-Player::Player(string _name, float _health, float _maxhealth, bool _isAlive, float x, float y, float _speed) : Character(x, y, _health, _speed, 0)
+Texture _texture("E:\\ProiectPOO\\ProiectPOO\\player.png");
+Player::Player(string _name, float _health, float _maxhealth, bool _isAlive, float x, float y, float _speed) : Character(x, y, _health, _speed, 0), CurrentFrame(_texture)
 {
-	//playerCircle
-	playerCircle.setRadius(20.f);
-	playerCircle.setFillColor(Color(255, 220, 180));
-	playerCircle.setOutlineColor(Color::Black);
-	playerCircle.setOutlineThickness(2.f);
-	playerCircle.setOrigin(Vector2f(20.f, 20.f));
-	playerCircle.setPosition(Position);
+  
+    CurrentFrame.setTexture(_texture);
+    Vector2u texSize = _texture.getSize(); // dimensiunea în pixeli a texturii
+    
+	CurrentFrame.setScale(Vector2f(0.7f, 0.7f));
+    CurrentFrame.setOrigin(Vector2f(texSize.x / 2.f, texSize.y / 2.f));
+
+	
     initialPosition = Position;
     health = _health;
 	maxhealth = _maxhealth;
@@ -22,15 +24,10 @@ Player::Player(string _name, float _health, float _maxhealth, bool _isAlive, flo
     isDead = false;
     takesDamage = false;
 	name = _name;
-	//Gun
-	gun.setSize(Vector2f(8.f, 16.f));
-	gun.setFillColor(Color(128, 128, 128));
-	gun.setOutlineColor(Color::Black);
-	gun.setOutlineThickness(2.f);
-	gun.setOrigin(Vector2f(4.f, -20.f));
-	gun.setPosition(Position);
-
-	//collider
+	
+	radius = 20.f;
+    
+	CurrentFrame.setPosition(Position);
 	collider.setSize(Vector2f(40.f, 40.f));
 	collider.setFillColor(Color::Transparent);
 	collider.setOrigin(collider.getSize() / 2.f);
@@ -47,13 +44,18 @@ Player::Player(string _name, float _health, float _maxhealth, bool _isAlive, flo
 		exception.Print();
 	}
 	canTakeDamage = true;
+    /*
+    if (!texture.getSize().x|| !texture.getSize().y)
+    {
+        GameException exception("Player", "Texture failed to load");
+    }*/
 }
 void Player::Update()
 {
     if (isAlive && takesDamage && damageClock.getElapsedTime().asSeconds() >= 0.5f)
     {
-        playerCircle.setFillColor(sf::Color(255, 220, 180));
-        gun.setFillColor(sf::Color(128, 128, 128));
+        CurrentFrame.setColor(sf::Color(255, 220, 180));
+        
         takesDamage = false;
     }
 }
@@ -79,14 +81,12 @@ void Player::handleInput(RenderWindow& window)
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Left))
         {
-            playerCircle.rotate(degrees(-speed));
-            gun.rotate(degrees(-speed));
+			CurrentFrame.rotate(-degrees(speed));
             angle -= speed;
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Right))
         {
-            playerCircle.rotate(degrees(speed));
-            gun.rotate(degrees(speed));
+			CurrentFrame.rotate(degrees(speed));
             angle += speed;
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Space)&& shootClock.getElapsedTime().asSeconds() > 1)
@@ -122,9 +122,18 @@ void Player::handleInput(RenderWindow& window)
         IncreaseScore(25);
     }
 }
+int Player::getScoreCount()
+{
+    return scoreCount;
+}
+void Player::ResetScoreCount()
+{
+    scoreCount = 0;
+}
 void Player::IncreaseScore(int value)
 {
     score += value;
+	scoreCount += value;
     if (score > highScore) highScore = score;
     cout << "Score increased!" << endl;
 }
@@ -133,13 +142,10 @@ void Player::Respawn()
     health = maxhealth;
     isAlive = true;
     Position = Vector2f(initialPosition);
-    playerCircle.setPosition(Position);
-    gun.setPosition(Position);
+   
     collider.setPosition(Position);
-    playerCircle.setFillColor(Color(255, 220, 180));
-    playerCircle.setOutlineColor(Color::Black);
-    gun.setOutlineColor(Color::Black);
-    gun.setFillColor(Color(128, 128, 128));
+	CurrentFrame.setPosition(Position);
+    CurrentFrame.setColor(Color::White);
     score = 0;
     cout << "Player respawned" << endl;
 }
@@ -191,8 +197,7 @@ void Player::move()
     }
 
     if (isAlive) {
-        playerCircle.setPosition(Position);
-        gun.setPosition(Position);
+		CurrentFrame.setPosition(Position);
         collider.setPosition(Position);
     }
 }
@@ -206,8 +211,8 @@ void Player::draw(RenderWindow& window)
     {
         bullets[i].draw(window);
     }
-    window.draw(playerCircle);
-    window.draw(gun);
+    window.draw(CurrentFrame);
+
     window.draw(collider);
 
 }
@@ -218,8 +223,7 @@ void Player::TakeDamage(float value)
         health -= value;
         canTakeDamage = false;
         damageCooldownClock.restart();
-        playerCircle.setFillColor(Color::Red);
-        gun.setFillColor(Color(139, 0, 0));
+        CurrentFrame.setColor(Color::Red);
 
         takesDamage = true;
         damageClock.restart();
@@ -237,10 +241,7 @@ void Player::TakeDamage(float value)
 }
 void Player::Die()
 {
-    playerCircle.setFillColor(Color::Transparent);
-    gun.setFillColor(Color::Transparent);
-    playerCircle.setOutlineColor(Color::Transparent);
-    gun.setOutlineColor(Color::Transparent);
+    CurrentFrame.setColor(Color::Transparent);
     isAlive = false;
     cout << "Player is dead!" << endl;
     cout << "Your score:" << score << "     Your high score:" << highScore << endl;
@@ -294,7 +295,7 @@ bool Player::get_state()
 }
 float Player::getCircleRadius()
 {
-    return playerCircle.getRadius();
+    return radius;
 }
 Player& Player::operator=(Player& player)
 {

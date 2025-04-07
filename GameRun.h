@@ -20,7 +20,6 @@ class GameRun
 	EnemySpawner * enemySpawner;
 	RenderWindow * window;
 	Player * player;
-
 	MapLimit *limits[4];
 
 public:

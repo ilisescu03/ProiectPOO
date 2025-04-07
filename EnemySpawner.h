@@ -15,6 +15,8 @@ class EnemySpawner
 public:
 	EnemySpawner();
 	void Update(Player &player, RenderWindow &window);
+	void ResetTime();
+	void DecreaseTime();
 	void ClearVector();
 	float getRandomX();
 	float getRandomY();

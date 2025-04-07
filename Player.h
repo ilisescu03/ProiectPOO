@@ -15,7 +15,7 @@ private:
     
     float maxhealth;
    
-
+    Sprite CurrentFrame;
     Clock shootClock;
     Clock damageClock;
     Bullet b;
@@ -29,17 +29,22 @@ private:
 	bool isShooting = false;
   
     Clock damageCooldownClock;
+    float radius = 0;
+    int scoreCount = 0;
     int score = 0;
     int highScore = 0;
     char buff[250];
     
 
 public:
-    Player(string _name="nd", float _health=100, float _maxhealth=100, bool _isAlive=true, float x = 0, float y = 0, float _speed = 0);
+    Player();
+    Player(string _name="nd", float _health = 100, float _maxhealth = 100, bool _isAlive = true, float x = 0, float y = 0, float _speed = 0);
     bool getCanTakeDamage();
     void setCanTakeDamage(bool value);
     int getScore();
     int getHighScore();
+    int getScoreCount();
+    void ResetScoreCount();
     float getHealth();
     float getMaxHealth();
     void TakeDamage(float value);

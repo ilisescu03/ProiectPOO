@@ -7,12 +7,21 @@
 using namespace std;  
 EnemySpawner::EnemySpawner()  
 {  
-   spawnTime = 4.f;  
+   spawnTime = 8.f;  
 }  
+void EnemySpawner::ResetTime()
+{
+	spawnTime = 8.f;
+}
+void EnemySpawner::DecreaseTime()
+{
+	spawnTime -= 0.5f;
+	if (spawnTime < 1.f) spawnTime = 1.f;
+}
 void EnemySpawner::Update(Player &player, RenderWindow& window)
 {  
 	if (!player.get_state()) ClearVector();
-	if (SpawnClock.getElapsedTime().asSeconds() >= spawnTime)
+	if (SpawnClock.getElapsedTime().asSeconds() >= spawnTime&&enemies.size()<=30)
 	{
 		SpawnClock.restart();
 		enemies.push_back(Enemy(getRandomX(), getRandomY()));
@@ -22,7 +31,7 @@ void EnemySpawner::Update(Player &player, RenderWindow& window)
         if (it->GetState())
         {
             it = enemies.erase(it); // Remove from the list
-            player.IncreaseScore(25);
+            player.IncreaseScore(15);
         }
         else
         {
