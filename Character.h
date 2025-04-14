@@ -6,6 +6,7 @@ using namespace sf;
 class Character
 {
 protected:
+
 	float health;
 	float speed;
 	float angle;

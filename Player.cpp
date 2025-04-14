@@ -6,14 +6,14 @@
 #include "Bullet.h"
 using namespace std;
 using namespace sf;
-Texture _texture("E:\\ProiectPOO\\ProiectPOO\\player.png");
+Texture Player::_texture("E:\\ProiectPOO\\ProiectPOO\\player.png");
 Player::Player(string _name, float _health, float _maxhealth, bool _isAlive, float x, float y, float _speed) : Character(x, y, _health, _speed, 0), CurrentFrame(_texture)
 {
   
     CurrentFrame.setTexture(_texture);
     Vector2u texSize = _texture.getSize(); // dimensiunea în pixeli a texturii
     
-	CurrentFrame.setScale(Vector2f(0.7f, 0.7f));
+	CurrentFrame.setScale(Vector2f(0.5f, 0.5f));
     CurrentFrame.setOrigin(Vector2f(texSize.x / 2.f, texSize.y / 2.f));
 
 	
@@ -200,7 +200,7 @@ void Player::shoot()
     
         Bullet newBullet;
         float rotationinrads=angle* (3.14159265359f / 180.f);
-        newBullet.set_position(Position.x, Position.y, angle);
+        newBullet.set_position(Position.x-1.f, Position.y+5.f, angle);
         bullets.push_back(newBullet);
     
 }

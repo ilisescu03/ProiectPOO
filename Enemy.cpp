@@ -1,47 +1,43 @@
 ﻿#include "Enemy.h"
-Enemy::Enemy(float x, float y) :Character(x, y, 25, 1.0f, 0.0f)
+#include <SFML/Graphics.hpp>
+#include <iostream>
+#include <string>
+#include <vector>
+#include "Bullet.h"
+#include "Player.h"
+#include "Character.h"
+using namespace std;
+using namespace sf;
+
+Texture Enemy::_texture("E:\\ProiectPOO\\ProiectPOO\\enemy.png");
+Enemy::Enemy(float x, float y) :Character(x, y, 25, 1.0f, 0.0f), CurrentFrame(_texture)
 {
-    Position = Vector2f(x, y);
-    // Configurare corp (EnemyCircle)
-    EnemyCircle.setRadius(20.f);
-    EnemyCircle.setFillColor(Color(48, 87, 36));
-    EnemyCircle.setOutlineColor(Color::Black);
-    EnemyCircle.setOutlineThickness(2.f);
-    EnemyCircle.setOrigin(Vector2f(20.f, 20.f));
-    EnemyCircle.setPosition(Position); // Poziție inițială (o poți modifica)
-
-    // Configurare mână stângă (LeftHand)
-    LeftHand.setSize(Vector2f(16.f, 6.f));  // Dimensiune mai mică decât arma
-    LeftHand.setFillColor(Color(48, 87, 36)); // Aceeași culoare ca și corpul
-    LeftHand.setOutlineColor(Color::Black);
-    LeftHand.setOutlineThickness(2.f);
-    LeftHand.setOrigin(Vector2f(8.f, 3.f)); // Centrare aproximativă
-    LeftHand.setPosition(EnemyCircle.getPosition() + Vector2f(-18.f, 10.f)); // Lângă corp, spre stânga
-
-    // Configurare mână dreaptă (RightHand)
-    RightHand.setSize(Vector2f(16.f, 6.f));
-    RightHand.setFillColor(Color(48, 87, 36));
-    RightHand.setOutlineColor(Color::Black);
-    RightHand.setOutlineThickness(2.f);
-    RightHand.setOrigin(Vector2f(8.f, 3.f));
-    RightHand.setPosition(EnemyCircle.getPosition() + Vector2f(18.f, 10.f)); // Lângă corp, spre dreapta
+	CurrentFrame.setTexture(_texture);
+	Vector2u texSize = _texture.getSize(); // dimensiunea în pixeli a texturii
+	CurrentFrame.setScale(Vector2f(0.5f, 0.5f));
+	CurrentFrame.setOrigin(Vector2f(texSize.x / 2.f, texSize.y / 2.f));
+   
 
     health = 25;
     speed = 1.3f;
     angle = 0.0f;
+	CurrentFrame.setPosition(Position);
+
+	collider.setSize(Vector2f(40.f, 40.f));
+	collider.setFillColor(Color::Transparent);
+	collider.setOrigin(collider.getSize() / 2.f);
+	collider.setPosition(Position);
+
 }
 void Enemy::Draw(RenderWindow& window)
 {
-    window.draw(RightHand);
-    window.draw(LeftHand);
-    window.draw(EnemyCircle);
+	window.draw(CurrentFrame);
+	window.draw(collider);
 }
 void Enemy::TakeDamage(float value)
 {
     health -= value;
-    EnemyCircle.setFillColor(Color(139, 0, 0));
-    RightHand.setFillColor(Color(139, 0, 0));
-    LeftHand.setFillColor(Color(139, 0, 0));
+	CurrentFrame.setColor(Color::Red);
 
     takesDamage = true;
     damageClock.restart();
@@ -57,12 +53,7 @@ void Enemy::TakeDamage(float value)
 }
 void Enemy::Die()
 {
-    EnemyCircle.setFillColor(Color::Transparent);
-    EnemyCircle.setOutlineColor(Color::Transparent);
-    RightHand.setFillColor(Color::Transparent);
-    RightHand.setOutlineColor(Color::Transparent);
-    LeftHand.setFillColor(Color::Transparent);
-    LeftHand.setOutlineColor(Color::Transparent);
+	CurrentFrame.setColor(Color::Transparent);
     isDead = true;
 }
 void Enemy::Update(Player &player)
@@ -70,9 +61,7 @@ void Enemy::Update(Player &player)
     
     if (!isDead && takesDamage && damageClock.getElapsedTime().asSeconds() >= 0.5f)
     {
-        EnemyCircle.setFillColor(Color(48, 87, 36));
-        RightHand.setFillColor(Color(48, 87, 36));
-        LeftHand.setFillColor(Color(48, 87, 36));
+		CurrentFrame.setColor(sf::Color(255, 220, 180));
         takesDamage = false;
     }
     if (CollidesWPlayer(player)) {
@@ -94,44 +83,33 @@ void Enemy::goBack()
 }
 void Enemy::Move(Player& player)
 {
-    Vector2f direction = player.getPlayerPosition() - EnemyCircle.getPosition();
+    Vector2f direction = player.getPlayerPosition() -   CurrentFrame.getPosition();
     float length = sqrt(direction.x * direction.x + direction.y * direction.y);
     if (length != 0)
     {
         direction /= length;
     }
     angle = atan2(direction.y, direction.x)*180/3.14159265;
-    EnemyCircle.setRotation(degrees(angle));
+    CurrentFrame.setRotation(degrees(angle-90.f));
  
     float radians = angle * 3.14159265 / 180.f;
 
-    // Offset lateral pentru poziția brațelor (le păstrăm simetrice)
-    Vector2f lateralOffset(sin(radians) * 20.f, -cos(radians) * 20.f);
-
-    // **Mută brațele în față spre Player**
-    Vector2f forwardOffset(direction * 10.f);  // Împinge brațele în față
-
-    // Poziționează brațele
-    LeftHand.setPosition(EnemyCircle.getPosition() - lateralOffset + forwardOffset);
-    RightHand.setPosition(EnemyCircle.getPosition() + lateralOffset + forwardOffset);
-    LeftHand.setRotation(degrees(angle));
-    RightHand.setRotation(degrees(angle));
-    EnemyCircle.move(direction * speed);
-    LeftHand.move(direction * speed);
-    RightHand.move(direction * speed);
+    Position += direction * speed;
+	CurrentFrame.setPosition(Position);
+	collider.setPosition(Position);
 }
 bool Enemy::GetState()
 {
     return isDead;
 }
 bool Enemy::Collides(Bullet& bullet) {
-    float distance = sqrt(pow(bullet.GetPosition().x - EnemyCircle.getPosition().x, 2) +
-        pow(bullet.GetPosition().y - EnemyCircle.getPosition().y, 2));
-    return distance < (bullet.GetRadius() + EnemyCircle.getRadius());
+    float distance = sqrt(pow(bullet.GetPosition().x - collider.getPosition().x, 2) +
+        pow(bullet.GetPosition().y - collider.getPosition().y, 2));
+    return distance < (bullet.GetRadius() + collider.getSize().x / 2.0f);
 }
 bool Enemy::CollidesWPlayer(Player& player)
 {
-    float distance = sqrt(pow(player.getPlayerPosition().x - EnemyCircle.getPosition().x, 2) +
-        pow(player.getPlayerPosition().y - EnemyCircle.getPosition().y, 2));
-    return distance < (player.getCircleRadius() + EnemyCircle.getRadius());
+    float distance = sqrt(pow(player.getPlayerPosition().x - collider.getPosition().x, 2) +
+        pow(player.getPlayerPosition().y - collider.getPosition().y, 2));
+    return distance < (player.getCircleRadius() + collider.getSize().x / 2.0f);
 }

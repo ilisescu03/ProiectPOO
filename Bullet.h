@@ -10,7 +10,9 @@ using namespace sf;
 class Bullet
 {
 private:
-	CircleShape bullet;
+	Sprite bulletSprite;
+	CircleShape bulletCollider;
+	static Texture _texture;
 	Vector2f currVelocity;
 	float angle;
 	int damage;

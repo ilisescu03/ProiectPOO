@@ -1,6 +1,7 @@
 #include "Character.h"
 Character::Character(float x, float y, float _health, float _speed, float _angle)
 {
+	
 	Position = Vector2f(x, y);
 	health = _health;
 	speed = _speed;

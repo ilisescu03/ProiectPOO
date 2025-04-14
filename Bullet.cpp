@@ -5,17 +5,24 @@
 
 using namespace std;
 using namespace sf;
-Bullet::Bullet() :currVelocity(0.f, 0.f), speed(10), damage(10), isActive(true), angle(0)
+Texture Bullet::_texture("E:\\ProiectPOO\\ProiectPOO\\bullet.png");
+Bullet::Bullet() :currVelocity(0.f, 0.f), speed(10), damage(10), isActive(true), angle(0), bulletSprite(_texture)
 {
-	bullet.setRadius(4.f);
-	bullet.setFillColor(Color::Yellow);
-	bullet.setOrigin(Vector2f(5.f, 5.f));
-	bullet.setPosition(Vector2f(0.f, 0.f));
+	bulletSprite.setTexture(_texture);
+	Vector2u texSize = _texture.getSize(); // dimensiunea în pixeli a texturii
+	bulletSprite.setScale(Vector2f(0.05f, 0.05f));
+	bulletSprite.setOrigin(Vector2f(texSize.x / 2.f, texSize.y / 2.f));
+
+	bulletCollider.setRadius(4.f);
+	bulletCollider.setFillColor(Color::Transparent);
+	bulletCollider.setOrigin(Vector2f(5.f, 5.f));
+	bulletCollider.setPosition(Vector2f(0.f, 0.f));
 }
 void Bullet::set_position(float x, float y, float rotation)
 {
-    bullet.setPosition(Vector2f(x, y)); 
-
+	bulletSprite.setPosition(Vector2f(x, y));
+	bulletCollider.setPosition(Vector2f(x, y));
+	bulletSprite.setRotation(degrees(rotation));
     float rotationInRadians = (rotation + 90) * (3.14159265359f / 180.f);
 
 
@@ -26,15 +33,18 @@ void Bullet::set_position(float x, float y, float rotation)
 
 void Bullet::Update()
 {
-	if (isActive) bullet.move(currVelocity);
-	if (bullet.getPosition().x < 0 || bullet.getPosition().x > 1366 || bullet.getPosition().y < 0 || bullet.getPosition().y > 768) {
+	if (isActive){ bulletCollider.move(currVelocity);
+	bulletSprite.move(currVelocity);
+	}
+	if (bulletCollider.getPosition().x < 0 || bulletCollider.getPosition().x > 1366 || bulletCollider.getPosition().y < 0 || bulletCollider.getPosition().y > 768) {
 
 		Destroy();
 	}
 }
 void Bullet::draw(RenderWindow& window)
 {
-	window.draw(bullet);
+	window.draw(bulletSprite);
+	window.draw(bulletCollider);
 }
 void Bullet::Destroy()
 {
@@ -62,9 +72,9 @@ void Bullet::deactivate() {
 
 Vector2f Bullet::GetPosition()
 {
-	return Vector2f(bullet.getPosition());
+	return Vector2f(bulletCollider.getPosition());
 }
 float Bullet::GetRadius()
 {
-	return bullet.getRadius();
+	return bulletCollider.getRadius();
 }

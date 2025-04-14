@@ -11,6 +11,9 @@ using namespace sf;
 class Enemy : public Character
 {
 private:
+	Sprite CurrentFrame;
+	static Texture _texture;
+	RectangleShape collider;
 	CircleShape EnemyCircle;
 	RectangleShape LeftHand;
 	RectangleShape RightHand;

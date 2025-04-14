@@ -12,9 +12,8 @@ class Player : public Character
 {
 private:
     string name;
-    
     float maxhealth;
-   
+    static Texture _texture;
     Sprite CurrentFrame;
     Clock shootClock;
     Clock damageClock;
