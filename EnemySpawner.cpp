@@ -15,7 +15,7 @@ void EnemySpawner::ResetTime()
 }
 void EnemySpawner::DecreaseTime()
 {
-	spawnTime -= 0.5f;
+    spawnTime /= 1.27f;
 	if (spawnTime < 1.f) spawnTime = 1.f;
 }
 void EnemySpawner::Update(Player &player, RenderWindow& window)

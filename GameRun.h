@@ -10,6 +10,7 @@
 #include "HealthBar.h"
 #include "Enemy.h"
 #include "EnemySpawner.h"
+#include "Background.h"
 #include "Character.h"
 #include "GameHUD.h"
 using namespace std;
@@ -21,7 +22,7 @@ class GameRun
 	RenderWindow * window;
 	Player * player;
 	MapLimit *limits[4];
-
+	Background *background;
 public:
 	GameRun();
 	~GameRun();

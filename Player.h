@@ -14,9 +14,12 @@ private:
     string name;
     float maxhealth;
     static Texture _texture;
+    IntRect frames[8];
     Sprite CurrentFrame;
     Clock shootClock;
     Clock damageClock;
+    Clock AnimationClock;
+	int frameIndex = 0;
     Bullet b;
 	vector <Bullet> bullets;
    

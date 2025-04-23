@@ -17,7 +17,7 @@ using namespace sf;
 GameRun::GameRun()
 {
 	window = new RenderWindow(VideoMode::getDesktopMode(), "Zombie Invasion Survival");
-	
+	background = new Background();
 	player = new Player("Aditzuu", 100.f, 100.f, true, 100.f, 100.f, 2.f);
 	enemySpawner = new EnemySpawner();
 	gameHUD = new GameHUD();
@@ -35,6 +35,7 @@ GameRun::GameRun()
 GameRun::~GameRun()
 {
 	delete window;
+	delete background;
 	delete player;
 	delete gameHUD;
 	delete enemySpawner;
@@ -78,6 +79,7 @@ void GameRun::Run() {
 	Clock clock;
 	float totalTime = 0.f;
     while (window->isOpen()) {
+		
 		Time elapsed = clock.restart();
 		float deltaTime = elapsed.asSeconds();
 		if (player->get_state()) totalTime += deltaTime;
@@ -107,7 +109,7 @@ void GameRun::Run() {
 		HighScoreText.setString("High score:" + to_string(player->getHighScore()));
 		
         window->clear(Color(200, 200, 200));
-        
+		background->draw(*window);
 
         player->draw(*window);
 		

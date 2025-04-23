@@ -6,15 +6,18 @@
 #include "Bullet.h"
 using namespace std;
 using namespace sf;
-Texture Player::_texture("E:\\ProiectPOO\\ProiectPOO\\player.png");
+Texture Player::_texture("E:\\ProiectPOO\\ProiectPOO\\playersprites.png");
 Player::Player(string _name, float _health, float _maxhealth, bool _isAlive, float x, float y, float _speed) : Character(x, y, _health, _speed, 0), CurrentFrame(_texture)
 {
   
-    CurrentFrame.setTexture(_texture);
-    Vector2u texSize = _texture.getSize(); // dimensiunea în pixeli a texturii
     
-	CurrentFrame.setScale(Vector2f(0.5f, 0.5f));
-    CurrentFrame.setOrigin(Vector2f(texSize.x / 2.f, texSize.y / 2.f));
+    for (int i = 0;i < 8;i++)
+    {
+        frames[i] = sf::IntRect({ 320 * i,0 }, { 320,320 });
+    }
+    CurrentFrame.setTextureRect(frames[0]);
+    CurrentFrame.setScale(Vector2f(0.5f, 0.5f));
+    CurrentFrame.setOrigin(Vector2f(160.f, 160.f));
 
 	
     initialPosition = Position;
@@ -55,7 +58,7 @@ void Player::Update()
     
     if (isAlive && takesDamage && damageClock.getElapsedTime().asSeconds() >= 0.5f)
     {
-        CurrentFrame.setColor(sf::Color(255, 220, 180));
+        CurrentFrame.setColor(Color::White);
         
         takesDamage = false;
     }
@@ -114,12 +117,22 @@ void Player::handleInput(RenderWindow& window)
             {
                 counter = 1;
             }
-
+            if (AnimationClock.getElapsedTime().asSeconds() >= 0.1f)
+            {
+                frameIndex++;
+                if (frameIndex >= 8) frameIndex = 0;
+                CurrentFrame.setTexture(_texture);
+                CurrentFrame.setTextureRect(frames[frameIndex]);
+                AnimationClock.restart();
+            }
             if (moveOffset != Vector2f(0.f, 0.f))
             {
                 lastMovement = moveOffset;
                 Position += moveOffset;
             }
+        }
+        else {
+			CurrentFrame.setTextureRect(frames[0]);
         }
     }
 
@@ -200,7 +213,7 @@ void Player::shoot()
     
         Bullet newBullet;
         float rotationinrads=angle* (3.14159265359f / 180.f);
-        newBullet.set_position(Position.x-1.f, Position.y+5.f, angle);
+        newBullet.set_position(Position.x, Position.y, angle);
         bullets.push_back(newBullet);
     
 }
