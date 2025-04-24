@@ -1,9 +1,27 @@
-﻿  EnemySpawner.cpp
+﻿  Collectible.cpp
 E:\External\include\SFML\System\Exception.hpp(41,47): warning C4275: non dll-interface class 'std::runtime_error' used as base for dll-interface class 'sf::Exception'
-  (compiling source file 'EnemySpawner.cpp')
+  (compiling source file 'Collectible.cpp')
       C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\stdexcept(100,19):
       see declaration of 'std::runtime_error'
       E:\External\include\SFML\System\Exception.hpp(41,23):
       see declaration of 'sf::Exception'
   
+E:\ProiectPOO\ProiectPOO\Collectible.cpp(46,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  GameRun.cpp
+E:\External\include\SFML\System\Exception.hpp(41,47): warning C4275: non dll-interface class 'std::runtime_error' used as base for dll-interface class 'sf::Exception'
+  (compiling source file 'GameRun.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\stdexcept(100,19):
+      see declaration of 'std::runtime_error'
+      E:\External\include\SFML\System\Exception.hpp(41,23):
+      see declaration of 'sf::Exception'
+  
+  main.cpp
+E:\External\include\SFML\System\Exception.hpp(41,47): warning C4275: non dll-interface class 'std::runtime_error' used as base for dll-interface class 'sf::Exception'
+  (compiling source file 'main.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\stdexcept(100,19):
+      see declaration of 'std::runtime_error'
+      E:\External\include\SFML\System\Exception.hpp(41,23):
+      see declaration of 'sf::Exception'
+  
+  Generating Code...
   ProiectPOO.vcxproj -> E:\ProiectPOO\x64\Debug\ProiectPOO.exe

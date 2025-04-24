@@ -63,6 +63,14 @@ void Player::Update()
         takesDamage = false;
     }
 }
+void Player::setShootingCooldown(float value)
+{
+	shootingCooldown = value;
+}
+void Player::setImmunity(bool value)
+{
+	isImune = value;
+}
 void Player::handleInput(RenderWindow& window)
 {
     static int counter = 1; // Static counter to keep track of the message number
@@ -103,7 +111,7 @@ void Player::handleInput(RenderWindow& window)
             angle += speed;
             isMoving = true;
         }
-        if (Keyboard::isKeyPressed(Keyboard::Key::Space) && shootClock.getElapsedTime().asSeconds() > 1)
+        if (Keyboard::isKeyPressed(Keyboard::Key::Space) && shootClock.getElapsedTime().asSeconds() > shootingCooldown)
         {
             shoot();
             shootClock.restart();
@@ -135,7 +143,7 @@ void Player::handleInput(RenderWindow& window)
 			CurrentFrame.setTextureRect(frames[0]);
         }
     }
-
+    /*
     if (Keyboard::isKeyPressed(Keyboard::Key::P))
     {
         if (canTakeDamage)
@@ -146,7 +154,7 @@ void Player::handleInput(RenderWindow& window)
     }
     else {
         canTakeDamage = true;
-    }
+    }*/
     if (Keyboard::isKeyPressed(Keyboard::Key::R))
     {
         Respawn();
@@ -155,6 +163,19 @@ void Player::handleInput(RenderWindow& window)
     {
         IncreaseScore(25);
     }
+}
+void Player::Heal(float value)
+{
+	if (health < maxhealth)
+	{
+		health += value;
+		if (health > maxhealth) health = maxhealth;
+		cout << "Player healed!" << endl;
+	}
+	if (health + value > maxhealth)
+	{
+        health = maxhealth;
+	}
 }
 int Player::getScoreCount()
 {
@@ -254,7 +275,7 @@ void Player::draw(RenderWindow& window)
 void Player::TakeDamage(float value)
 {
     cout << "Player takes damage!" << endl;
-    if (canTakeDamage) {
+    if (canTakeDamage&&!isImune) {
         health -= value;
         canTakeDamage = false;
         damageCooldownClock.restart();

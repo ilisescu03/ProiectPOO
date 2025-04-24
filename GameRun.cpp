@@ -18,7 +18,10 @@ GameRun::GameRun()
 {
 	window = new RenderWindow(VideoMode::getDesktopMode(), "Zombie Invasion Survival");
 	background = new Background();
-	player = new Player("Aditzuu", 100.f, 100.f, true, 100.f, 100.f, 2.f);
+	player = new Player("Aditzuu", 100.f, 100.f, true, 500.f, 500.f, 2.f);
+	collectible = new Collectible("Health", 100.f, 100.f);
+	collectible1 = new Collectible("Armor", 100.f, 500.f);
+	collectible2 = new Collectible("FireRate", 500.f, 100.f);
 	enemySpawner = new EnemySpawner();
 	gameHUD = new GameHUD();
 	MapLimit rightLimit(1350, 0, 20, 768);
@@ -39,6 +42,7 @@ GameRun::~GameRun()
 	delete player;
 	delete gameHUD;
 	delete enemySpawner;
+	delete collectible;
 	for (int i = 0;i < 4;i++)
 	{
 		delete limits[i];
@@ -114,11 +118,45 @@ void GameRun::Run() {
         player->draw(*window);
 		
 		enemySpawner->Update(*player, *window);
-		gameHUD->Update(*window, player->getHealth(), player->getMaxHealth(), player->getScore(), player->getHighScore(), totalTime, TimerText, ScoreText, HighScoreText);
-     
+		
         for (int i = 0; i < 4; i++) {
             limits[i]->draw(*window);
         }
+		if (collectible->GetState() && collectible->Collides(player->getPlayerCollider()))
+		{
+			player->Heal(20.f);
+			collectible->Destroy();
+			
+		}
+		collectible->Draw(*window);
+		if (collectible1->GetState() && collectible1->Collides(player->getPlayerCollider()))
+		{
+			player->setImmunity(true);
+			armorClock.restart();
+			armorActive = true;
+			collectible1->Destroy();
+		}
+		collectible1->Draw(*window);
+		if (armorActive && armorClock.getElapsedTime().asSeconds() >= 10.f)
+		{
+			player->setImmunity(false);
+			armorActive = false;
+		}
+		if (collectible2->GetState() && collectible2->Collides(player->getPlayerCollider()))
+		{
+			player->setShootingCooldown(0.25f);
+			fireRateClock.restart();
+			fireRateActive = true;
+			collectible2->Destroy();
+		}
+		collectible2->Draw(*window);
+		if (fireRateActive && fireRateClock.getElapsedTime().asSeconds() >= 10.f)
+		{
+			player->setShootingCooldown(1.f); 
+			fireRateActive = false;
+		}
+		gameHUD->Update(*window, player->getHealth(), player->getMaxHealth(), player->getScore(), player->getHighScore(), totalTime, TimerText, ScoreText, HighScoreText);
+
         window->display();
 		float sleepTime = frameTime - deltaTime;
 		if (sleepTime > 0) {

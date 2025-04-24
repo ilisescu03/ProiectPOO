@@ -27,7 +27,7 @@ Enemy::Enemy(float x, float y) :Character(x, y, 25, 1.0f, 0.0f), CurrentFrame(_T
 	CurrentFrame.setOrigin(Vector2f(160.f, 160.f));
    
 
-    health = 25;
+    health = 20;
     speed = 1.3f;
     angle = 0.0f;
 	CurrentFrame.setPosition(Position);

@@ -22,7 +22,7 @@ private:
 	int frameIndex = 0;
     Bullet b;
 	vector <Bullet> bullets;
-   
+	bool isImune = false;
     Vector2f lastMovement;
     Vector2f initialPosition;
     RectangleShape collider;
@@ -37,14 +37,16 @@ private:
     int highScore = 0;
     char buff[250];
     
+    float shootingCooldown = 1.f;
 
 public:
     Player();
-    Player(string _name="nd", float _health = 100, float _maxhealth = 100, bool _isAlive = true, float x = 0, float y = 0, float _speed = 0);
+    Player(string _name="nd", float _health = 100, float _maxhealth = 100, bool _isAlive = true, float x = 500.f, float y = 500.f, float _speed = 0);
     bool getCanTakeDamage();
     void setCanTakeDamage(bool value);
     int getScore();
-    
+	void setImmunity(bool value);
+	void setShootingCooldown(float value);
     int getHighScore();
     int getScoreCount();
     void ResetScoreCount();
@@ -53,6 +55,7 @@ public:
     void TakeDamage(float value);
     void Update();
     void Respawn();
+    void Heal(float value);
     void IncreaseScore(int value);
     void Die();
     vector<Bullet>& getBullets();
