@@ -23,7 +23,10 @@ Collectible::Collectible(string _type, float x, float y): Icon(_texture)
 	}
 	
 	Icon.setOrigin(Vector2f(80.f, 80.f));
-	Icon.setScale(Vector2f(0.25f, 0.25f));
+	if(type=="Health") Icon.setScale(Vector2f(0.25f, 0.25f));
+	else if (type == "Armor") Icon.setScale(Vector2f(0.4f, 0.4f));
+	else if (type == "FireRate") Icon.setScale(Vector2f(0.2f, 0.2f));
+	else throw GameException("Collectible", "Collectible type not found");
 	position = Vector2f(x, y);
 	collider.setRadius(20.f);
 	collider.setFillColor(Color::Transparent);

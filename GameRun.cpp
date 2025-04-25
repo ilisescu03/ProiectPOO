@@ -12,16 +12,28 @@
 #include "HealthBar.h"
 #include "Character.h"
 #include "EnemySpawner.h"
+#include "fstream"
 using namespace std;
 using namespace sf;
+
 GameRun::GameRun()
 {
 	window = new RenderWindow(VideoMode::getDesktopMode(), "Zombie Invasion Survival");
 	background = new Background();
 	player = new Player("Aditzuu", 100.f, 100.f, true, 500.f, 500.f, 2.f);
-	collectible = new Collectible("Health", 100.f, 100.f);
-	collectible1 = new Collectible("Armor", 100.f, 500.f);
-	collectible2 = new Collectible("FireRate", 500.f, 100.f);
+	int highScore = 0;
+	ifstream file("E:\\ProiectPOO\\ProiectPOO\\highscore.txt");
+	if (file.is_open()) {
+		file >> highScore;
+		file.close();
+	}
+	else {
+		ofstream createFile("E:\\ProiectPOO\\ProiectPOO\\highscore.txt");
+		createFile << 0;
+		createFile.close();
+	}
+	player->setHighScore(highScore);
+	collectibleSpawner = new CollectibleSpawner();
 	enemySpawner = new EnemySpawner();
 	gameHUD = new GameHUD();
 	MapLimit rightLimit(1350, 0, 20, 768);
@@ -34,6 +46,7 @@ GameRun::GameRun()
 	
 	cout << "App is running..." << endl;
 	cout << player << endl;
+	
 }
 GameRun::~GameRun()
 {
@@ -42,11 +55,12 @@ GameRun::~GameRun()
 	delete player;
 	delete gameHUD;
 	delete enemySpawner;
-	delete collectible;
+	delete collectibleSpawner;
 	for (int i = 0;i < 4;i++)
 	{
 		delete limits[i];
 	}
+	
 }
 void GameRun::Run() {
 	
@@ -82,6 +96,7 @@ void GameRun::Run() {
 	TimerText.setString("0:00");
 	Clock clock;
 	float totalTime = 0.f;
+	
     while (window->isOpen()) {
 		
 		Time elapsed = clock.restart();
@@ -111,7 +126,14 @@ void GameRun::Run() {
         }
 		ScoreText.setString("Score:" + to_string(player->getScore()));
 		HighScoreText.setString("High score:" + to_string(player->getHighScore()));
-		
+		if (player->getScore() > player->getHighScore()) {
+			player->setHighScore(player->getScore());
+			ofstream saveFile("E:\\ProiectPOO\\ProiectPOO\\highscore.txt");
+			if (saveFile.is_open()) {
+				saveFile << player->getHighScore();
+				saveFile.close();
+			}
+		}
         window->clear(Color(200, 200, 200));
 		background->draw(*window);
 
@@ -122,47 +144,14 @@ void GameRun::Run() {
         for (int i = 0; i < 4; i++) {
             limits[i]->draw(*window);
         }
-		if (collectible->GetState() && collectible->Collides(player->getPlayerCollider()))
-		{
-			player->Heal(20.f);
-			collectible->Destroy();
-			
-		}
-		collectible->Draw(*window);
-		if (collectible1->GetState() && collectible1->Collides(player->getPlayerCollider()))
-		{
-			player->setImmunity(true);
-			armorClock.restart();
-			armorActive = true;
-			collectible1->Destroy();
-		}
-		collectible1->Draw(*window);
-		if (armorActive && armorClock.getElapsedTime().asSeconds() >= 10.f)
-		{
-			player->setImmunity(false);
-			armorActive = false;
-		}
-		if (collectible2->GetState() && collectible2->Collides(player->getPlayerCollider()))
-		{
-			player->setShootingCooldown(0.25f);
-			fireRateClock.restart();
-			fireRateActive = true;
-			collectible2->Destroy();
-		}
-		collectible2->Draw(*window);
-		if (fireRateActive && fireRateClock.getElapsedTime().asSeconds() >= 10.f)
-		{
-			player->setShootingCooldown(1.f); 
-			fireRateActive = false;
-		}
+		collectibleSpawner->Update(*window, *player);
 		gameHUD->Update(*window, player->getHealth(), player->getMaxHealth(), player->getScore(), player->getHighScore(), totalTime, TimerText, ScoreText, HighScoreText);
-
+		
         window->display();
-		float sleepTime = frameTime - deltaTime;
-		if (sleepTime > 0) {
-			this_thread::sleep_for(chrono::duration<float>(sleepTime));
-		}
+		
     }
+	
+	
     cout << "App is closing..." << endl;
 }
 

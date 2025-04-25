@@ -48,6 +48,7 @@ public:
 	void setImmunity(bool value);
 	void setShootingCooldown(float value);
     int getHighScore();
+	void setHighScore(int value);
     int getScoreCount();
     void ResetScoreCount();
     float getHealth();

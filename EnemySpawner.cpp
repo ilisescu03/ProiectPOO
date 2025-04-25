@@ -21,7 +21,7 @@ void EnemySpawner::DecreaseTime()
 void EnemySpawner::Update(Player &player, RenderWindow& window)
 {  
 	if (!player.get_state()) ClearVector();
-	if (SpawnClock.getElapsedTime().asSeconds() >= spawnTime&&enemies.size()<=30)
+	if (SpawnClock.getElapsedTime().asSeconds() >= spawnTime&&enemies.size()<=20)
 	{
 		SpawnClock.restart();
 		enemies.push_back(Enemy(getRandomX(), getRandomY()));

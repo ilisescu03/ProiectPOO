@@ -10,7 +10,7 @@ Bullet::Bullet() :currVelocity(0.f, 0.f), speed(10), damage(10), isActive(true),
 {
 	bulletSprite.setTexture(_texture);
 	Vector2u texSize = _texture.getSize(); // dimensiunea în pixeli a texturii
-	bulletSprite.setScale(Vector2f(0.05f, 0.05f));
+	bulletSprite.setScale(Vector2f(0.06f, 0.06f));
 	bulletSprite.setOrigin(Vector2f(texSize.x / 2.f, texSize.y / 2.f));
 
 	bulletCollider.setRadius(4.f);

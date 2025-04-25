@@ -53,6 +53,10 @@ Player::Player(string _name, float _health, float _maxhealth, bool _isAlive, flo
         GameException exception("Player", "Texture failed to load");
     }*/
 }
+void Player::setHighScore(int value)
+{
+	highScore = value;
+}
 void Player::Update()
 {
     
