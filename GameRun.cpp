@@ -1,10 +1,12 @@
 #include "GameRun.h"
+
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
 #include <vector>
 #include <thread>
 #include <chrono>
+#include "GameOverMenu.h"
 #include "Player.h"
 #include "MapLimit.h"
 #include "Bullet.h"
@@ -36,6 +38,7 @@ GameRun::GameRun()
 	collectibleSpawner = new CollectibleSpawner();
 	enemySpawner = new EnemySpawner();
 	gameHUD = new GameHUD();
+	gameOverMenu = new GameOverMenu(*window);
 	MapLimit rightLimit(1350, 0, 20, 768);
 	limits[0] = new MapLimit (0, 0, 1366, 20);
 	limits[1] = new MapLimit (0, 768, 1366, 20);
@@ -101,11 +104,13 @@ void GameRun::Run() {
 		
 		Time elapsed = clock.restart();
 		float deltaTime = elapsed.asSeconds();
-		if (player->get_state()) totalTime += deltaTime;
+		if (player->get_state()) { totalTime += deltaTime; gameOverMenu->hide(); }
 		else {
+			gameOverMenu->show();
 			totalTime = 0.f;
 			enemySpawner->ResetTime();
 		}
+		
 		if (player->getScoreCount() > 65
 			) 
 		{ 
@@ -145,8 +150,8 @@ void GameRun::Run() {
             limits[i]->draw(*window);
         }
 		collectibleSpawner->Update(*window, *player);
-		gameHUD->Update(*window, player->getHealth(), player->getMaxHealth(), player->getScore(), player->getHighScore(), totalTime, TimerText, ScoreText, HighScoreText);
-		
+		gameHUD->Update(*collectibleSpawner, *window, player->getHealth(), player->getMaxHealth(), player->getScore(), player->getHighScore(), totalTime, TimerText, ScoreText, HighScoreText);
+		gameOverMenu->draw(*window, player->getScore(), player->getHighScore());
         window->display();
 		
     }

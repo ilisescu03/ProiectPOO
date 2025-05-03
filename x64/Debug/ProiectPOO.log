@@ -1,9 +1,27 @@
-﻿  EnemySpawner.cpp
+﻿  GameOverMenu.cpp
 E:\External\include\SFML\System\Exception.hpp(41,47): warning C4275: non dll-interface class 'std::runtime_error' used as base for dll-interface class 'sf::Exception'
-  (compiling source file 'EnemySpawner.cpp')
+  (compiling source file 'GameOverMenu.cpp')
       C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\stdexcept(100,19):
       see declaration of 'std::runtime_error'
       E:\External\include\SFML\System\Exception.hpp(41,23):
       see declaration of 'sf::Exception'
   
+E:\ProiectPOO\ProiectPOO\GameOverMenu.cpp(14,73): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+E:\ProiectPOO\ProiectPOO\GameOverMenu.cpp(14,73): warning C4244:         with
+E:\ProiectPOO\ProiectPOO\GameOverMenu.cpp(14,73): warning C4244:         [
+E:\ProiectPOO\ProiectPOO\GameOverMenu.cpp(14,73): warning C4244:             T=unsigned int
+E:\ProiectPOO\ProiectPOO\GameOverMenu.cpp(14,73): warning C4244:         ]
+E:\ProiectPOO\ProiectPOO\GameOverMenu.cpp(14,73): warning C4244:         and
+E:\ProiectPOO\ProiectPOO\GameOverMenu.cpp(14,73): warning C4244:         [
+E:\ProiectPOO\ProiectPOO\GameOverMenu.cpp(14,73): warning C4244:             T=float
+E:\ProiectPOO\ProiectPOO\GameOverMenu.cpp(14,73): warning C4244:         ]
+E:\ProiectPOO\ProiectPOO\GameOverMenu.cpp(14,53): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+E:\ProiectPOO\ProiectPOO\GameOverMenu.cpp(14,53): warning C4244:         with
+E:\ProiectPOO\ProiectPOO\GameOverMenu.cpp(14,53): warning C4244:         [
+E:\ProiectPOO\ProiectPOO\GameOverMenu.cpp(14,53): warning C4244:             T=unsigned int
+E:\ProiectPOO\ProiectPOO\GameOverMenu.cpp(14,53): warning C4244:         ]
+E:\ProiectPOO\ProiectPOO\GameOverMenu.cpp(14,53): warning C4244:         and
+E:\ProiectPOO\ProiectPOO\GameOverMenu.cpp(14,53): warning C4244:         [
+E:\ProiectPOO\ProiectPOO\GameOverMenu.cpp(14,53): warning C4244:             T=float
+E:\ProiectPOO\ProiectPOO\GameOverMenu.cpp(14,53): warning C4244:         ]
   ProiectPOO.vcxproj -> E:\ProiectPOO\x64\Debug\ProiectPOO.exe

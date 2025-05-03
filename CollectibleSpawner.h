@@ -21,6 +21,10 @@ public:
 	CollectibleSpawner();
 	void Update(RenderWindow& window, Player &player);
 	void ResetTime();
+	bool getArmorActive();
+	bool getfireRateActive();
+	float GetRemainingArmorTime();
+	float GetRemainingFireRateTime();
 	void DecreaseTime();
 	void ClearVector();
 	float getRandomX();

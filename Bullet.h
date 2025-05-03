@@ -11,6 +11,7 @@ class Bullet
 {
 private:
 	Sprite bulletSprite;
+	Clock bulletClock;
 	CircleShape bulletCollider;
 	static Texture _texture;
 	Vector2f currVelocity;

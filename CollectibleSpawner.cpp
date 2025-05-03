@@ -26,13 +26,31 @@ void CollectibleSpawner::ClearVector()
 {
 	Collectibles.clear();
 }
+bool CollectibleSpawner::getArmorActive()
+{
+	return armorActive;
+}
+bool CollectibleSpawner::getfireRateActive()
+{
+	return fireRateActive;
+}
 void CollectibleSpawner::Update(RenderWindow &window, Player &player)
 {
 	if (!player.get_state()) ClearVector();
-	if (SpawnClock.getElapsedTime().asSeconds() >= getRandomTime() && Collectibles.size() <= 30 && player.getScore()>=700.f)
+	if (SpawnClock.getElapsedTime().asSeconds() >= getRandomTime() && Collectibles.size() <= 30 && player.getScore()>=500.f)
 	{
 		SpawnClock.restart();
 		Collectibles.push_back(Collectible(getRandomType(), getRandomX(), getRandomY()));
+	}
+	if (armorActive && armorClock.getElapsedTime().asSeconds() >= 10.f)
+	{
+		player.setImmunity(false);
+		armorActive = false;
+	}
+	if (fireRateActive && fireRateClock.getElapsedTime().asSeconds() >= 10.f)
+	{
+		player.setShootingCooldown(0.5f);
+		fireRateActive = false;
 	}
 	for (auto it = Collectibles.begin(); it != Collectibles.end();)
 	{
@@ -62,20 +80,19 @@ void CollectibleSpawner::Update(RenderWindow &window, Player &player)
 				}
 				it->Destroy();
 			}
-			if (armorActive && armorClock.getElapsedTime().asSeconds() >= 10.f)
-			{
-				player.setImmunity(false);
-				armorActive = false;
-			}
-			if (fireRateActive && fireRateClock.getElapsedTime().asSeconds() >= 10.f)
-			{
-				player.setShootingCooldown(0.5f);
-				fireRateActive = false;
-			}
+			
 			it->Draw(window);
 			++it;
 		}
 	}
+}
+float CollectibleSpawner::GetRemainingArmorTime()
+{
+	return 10.f - armorClock.getElapsedTime().asSeconds();
+}
+float CollectibleSpawner::GetRemainingFireRateTime()
+{
+	return 10.f - fireRateClock.getElapsedTime().asSeconds();
 }
 float CollectibleSpawner::getRandomX()
 {

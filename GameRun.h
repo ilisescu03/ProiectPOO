@@ -11,6 +11,7 @@
 #include "Enemy.h"
 #include "Collectible.h"
 #include "CollectibleSpawner.h"
+#include "GameOverMenu.h"
 #include "EnemySpawner.h"
 #include "Background.h"
 #include "Character.h"
@@ -24,6 +25,7 @@ class GameRun
 	bool armorActive = false;
 	bool fireRateActive = false;
 	GameHUD* gameHUD;
+	GameOverMenu* gameOverMenu;
 	CollectibleSpawner* collectibleSpawner;
 	EnemySpawner * enemySpawner;
 	RenderWindow * window;

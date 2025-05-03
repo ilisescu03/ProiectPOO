@@ -144,6 +144,7 @@
     <ClCompile Include="EnemySpawner.cpp" />
     <ClCompile Include="GameException.cpp" />
     <ClCompile Include="GameHUD.cpp" />
+    <ClCompile Include="GameOverMenu.cpp" />
     <ClCompile Include="GameRun.cpp" />
     <ClCompile Include="HealthBar.cpp" />
     <ClCompile Include="MapLimit.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="EnemySpawner.h" />
     <ClInclude Include="GameException.h" />
     <ClInclude Include="GameHUD.h" />
+    <ClInclude Include="GameOverMenu.h" />
     <ClInclude Include="GameRun.h" />
     <ClInclude Include="HealthBar.h" />
     <ClInclude Include="MapLimit.h" />

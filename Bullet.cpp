@@ -12,7 +12,8 @@ Bullet::Bullet() :currVelocity(0.f, 0.f), speed(10), damage(10), isActive(true),
 	Vector2u texSize = _texture.getSize(); // dimensiunea în pixeli a texturii
 	bulletSprite.setScale(Vector2f(0.06f, 0.06f));
 	bulletSprite.setOrigin(Vector2f(texSize.x / 2.f, texSize.y / 2.f));
-
+	bulletSprite.setColor(Color::Transparent);
+	bulletClock.restart();
 	bulletCollider.setRadius(4.f);
 	bulletCollider.setFillColor(Color::Transparent);
 	bulletCollider.setOrigin(Vector2f(5.f, 5.f));
@@ -33,6 +34,9 @@ void Bullet::set_position(float x, float y, float rotation)
 
 void Bullet::Update()
 {
+	if (bulletClock.getElapsedTime().asSeconds() >= 0.01f) {
+		bulletSprite.setColor(Color::White);
+	}
 	if (isActive){ bulletCollider.move(currVelocity);
 	bulletSprite.move(currVelocity);
 	}
