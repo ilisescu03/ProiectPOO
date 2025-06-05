@@ -90,71 +90,79 @@ void Player::handleInput(RenderWindow& window)
     if (isAlive) {
         Vector2f moveOffset(Vector2f(0.f, 0.f));
         bool isMoving = false;
+        bool pauseKeyPressedNow = Keyboard::isKeyPressed(Keyboard::Key::Escape);
+		if (pauseKeyPressedNow && !pauseKeyPressedLastFrame)
+		{
+            if (GamePaused) GamePaused = false;
+			else GamePaused = true;
+		}
+        pauseKeyPressedLastFrame = pauseKeyPressedNow;
+        if (!GamePaused) {
+            if (Keyboard::isKeyPressed(Keyboard::Key::W))
+            {
+                moveOffset.y -= speed;
+                isMoving = true;
+            }
+            if (Keyboard::isKeyPressed(Keyboard::Key::S))
+            {
+                moveOffset.y += speed;
+                isMoving = true;
+            }
+            if (Keyboard::isKeyPressed(Keyboard::Key::A))
+            {
+                moveOffset.x -= speed;
+                isMoving = true;
+            }
+            if (Keyboard::isKeyPressed(Keyboard::Key::D))
+            {
+                moveOffset.x += speed;
+                isMoving = true;
+            }
+            if (Keyboard::isKeyPressed(Keyboard::Key::Left))
+            {
+                CurrentFrame.rotate(-degrees(speed));
+                ShootSprite.rotate(-degrees(speed));
+                angle -= speed;
+                isMoving = true;
+            }
+            if (Keyboard::isKeyPressed(Keyboard::Key::Right))
+            {
+                CurrentFrame.rotate(degrees(speed));
+                ShootSprite.rotate(degrees(speed));
+                angle += speed;
+                isMoving = true;
+            }
+            if (Keyboard::isKeyPressed(Keyboard::Key::Space) && shootClock.getElapsedTime().asSeconds() > shootingCooldown)
+            {
+                shoot();
+                shootClock.restart();
+            }
 
-        if (Keyboard::isKeyPressed(Keyboard::Key::W))
-        {
-            moveOffset.y -= speed;
-            isMoving = true;
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Key::S))
-        {
-            moveOffset.y += speed;
-            isMoving = true;
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Key::A))
-        {
-            moveOffset.x -= speed;
-            isMoving = true;
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Key::D))
-        {
-            moveOffset.x += speed;
-            isMoving = true;
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Key::Left))
-        {
-            CurrentFrame.rotate(-degrees(speed));
-            ShootSprite.rotate(-degrees(speed));
-            angle -= speed;
-            isMoving = true;
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Key::Right))
-        {
-            CurrentFrame.rotate(degrees(speed));
-            ShootSprite.rotate(degrees(speed));
-            angle += speed;
-            isMoving = true;
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Key::Space) && shootClock.getElapsedTime().asSeconds() > shootingCooldown)
-        {
-            shoot();
-            shootClock.restart();
-        }
-
-        if (isMoving)
-        {
-            cout << "Player ul se deplaseaza " << counter << endl;
-            counter++;
-            if (counter > 6)
+            if (isMoving)
             {
-                counter = 1;
+                cout << "Player ul se deplaseaza " << counter << endl;
+                counter++;
+                if (counter > 6)
+                {
+                    counter = 1;
+                }
+                if (AnimationClock.getElapsedTime().asSeconds() >= 0.1f)
+                {
+                    frameIndex++;
+                    if (frameIndex >= 8) frameIndex = 0;
+                    CurrentFrame.setTexture(_texture);
+                    CurrentFrame.setTextureRect(frames[frameIndex]);
+                    AnimationClock.restart();
+                }
+                if (moveOffset != Vector2f(0.f, 0.f))
+                {
+                    lastMovement = moveOffset;
+                    Position += moveOffset;
+                }
             }
-            if (AnimationClock.getElapsedTime().asSeconds() >= 0.1f)
-            {
-                frameIndex++;
-                if (frameIndex >= 8) frameIndex = 0;
-                CurrentFrame.setTexture(_texture);
-                CurrentFrame.setTextureRect(frames[frameIndex]);
-                AnimationClock.restart();
+            else {
+                CurrentFrame.setTextureRect(frames[0]);
             }
-            if (moveOffset != Vector2f(0.f, 0.f))
-            {
-                lastMovement = moveOffset;
-                Position += moveOffset;
-            }
-        }
-        else {
-			CurrentFrame.setTextureRect(frames[0]);
         }
     }
     /*
@@ -318,6 +326,10 @@ void Player::TakeDamage(float value)
         }
     }
     
+}
+bool Player::isGamePaused()
+{
+	return GamePaused;
 }
 void Player::Die()
 {

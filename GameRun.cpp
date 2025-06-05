@@ -98,54 +98,65 @@ void GameRun::Run() {
 	float totalTime = 0.f;
 	
     while (window->isOpen()) {
-		
-		Time elapsed = clock.restart();
-		float deltaTime = elapsed.asSeconds();
-		if (player->get_state()) { totalTime += deltaTime; gameOverMenu->hide(); }
-		else {
-			gameOverMenu->show();
-			totalTime = 0.f;
-			enemySpawner->ResetTime();
+		if (!player->isGamePaused()) {
+			Time elapsed = clock.restart();
+			float deltaTime = elapsed.asSeconds();
+			if (player->get_state()) { totalTime += deltaTime; gameOverMenu->hide(); }
+			else {
+				gameOverMenu->show();
+				totalTime = 0.f;
+				enemySpawner->ResetTime();
+			}
+
+			if (player->getScoreCount() > 65
+				)
+			{
+				player->ResetScoreCount();
+				enemySpawner->DecreaseTime();
+			}
 		}
-		
-		if (player->getScoreCount() > 65
-			) 
-		{ 
-		player->ResetScoreCount();
-		enemySpawner->DecreaseTime();
+		else {
+			
+			clock.restart();
 		}
         while (const optional event = window->pollEvent()) {
             if (event->is<Event::Closed>())
                 window->close();
-        }
-        player->Update();
-        player->handleInput(*window);
-        player->move();
-        for (int i = 0; i < 4; i++) {
-            if (limits[i]->checkCollision(*player)) {
-                player->goBack();
-            }
-        }
-		ScoreText.setString("Score:" + to_string(player->getScore()));
-		HighScoreText.setString("High score:" + to_string(player->getHighScore()));
-		if (player->getScore() > player->getHighScore()) {
-			player->setHighScore(player->getScore());
-			
-		}
-        window->clear(Color(200, 200, 200));
-		background->draw(*window);
 
-        player->draw(*window);
-		
-		enemySpawner->Update(*player, *window);
-		
-        for (int i = 0; i < 4; i++) {
-            limits[i]->draw(*window);
         }
-		collectibleSpawner->Update(*window, *player);
-		gameHUD->Update(*collectibleSpawner, *window, player->getHealth(), player->getMaxHealth(), player->getScore(), player->getHighScore(), totalTime, TimerText, ScoreText, HighScoreText);
-		gameOverMenu->draw(*window, player->getScore(), player->getHighScore());
-        window->display();
+		if (!player->isGamePaused()) {
+			player->Update();
+		}
+			player->handleInput(*window);
+		if (!player->isGamePaused()) {
+			player->move();
+			for (int i = 0; i < 4; i++) {
+				if (limits[i]->checkCollision(*player)) {
+					player->goBack();
+				}
+			}
+			ScoreText.setString("Score:" + to_string(player->getScore()));
+			HighScoreText.setString("High score:" + to_string(player->getHighScore()));
+			if (player->getScore() > player->getHighScore()) {
+				player->setHighScore(player->getScore());
+
+			}
+			window->clear(Color(200, 200, 200));
+			background->draw(*window);
+
+			player->draw(*window);
+
+			enemySpawner->Update(*player, *window);
+
+			for (int i = 0; i < 4; i++) {
+				limits[i]->draw(*window);
+			}
+			collectibleSpawner->Update(*window, *player);
+			gameHUD->Update(*collectibleSpawner, *window, player->getHealth(), player->getMaxHealth(), player->getScore(), player->getHighScore(), totalTime, TimerText, ScoreText, HighScoreText);
+			gameOverMenu->draw(*window, player->getScore(), player->getHighScore());
+			window->display();
+		}
+        
 		
     }
 	ofstream fout("highscore.txt");

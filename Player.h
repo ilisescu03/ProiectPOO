@@ -23,6 +23,8 @@ private:
     Clock effectClock;
     Clock AnimationClock;
     bool shootingEffectOn = false;
+    bool GamePaused = false;
+    bool pauseKeyPressedLastFrame = false;
 	int frameIndex = 0;
     Bullet b;
 	vector <Bullet> bullets;
@@ -54,6 +56,7 @@ public:
     int getHighScore();
 	void setHighScore(int value);
     int getScoreCount();
+    bool isGamePaused();
     void ResetScoreCount();
     float getHealth();
     float getMaxHealth();

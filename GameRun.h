@@ -24,6 +24,8 @@ class GameRun
 	Clock fireRateClock;
 	bool armorActive = false;
 	bool fireRateActive = false;
+	
+
 	GameHUD* gameHUD;
 	GameOverMenu* gameOverMenu;
 	CollectibleSpawner* collectibleSpawner;
