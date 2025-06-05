@@ -23,18 +23,7 @@ GameRun::GameRun()
 	window = new RenderWindow(VideoMode::getDesktopMode(), "Zombie Invasion Survival");
 	background = new Background();
 	player = new Player("Aditzuu", 100.f, 100.f, true, 500.f, 500.f, 2.f);
-	int highScore = 0;
-	ifstream file("E:\\ProiectPOO\\ProiectPOO\\highscore.txt");
-	if (file.is_open()) {
-		file >> highScore;
-		file.close();
-	}
-	else {
-		ofstream createFile("E:\\ProiectPOO\\ProiectPOO\\highscore.txt");
-		createFile << 0;
-		createFile.close();
-	}
-	player->setHighScore(highScore);
+
 	collectibleSpawner = new CollectibleSpawner();
 	enemySpawner = new EnemySpawner();
 	gameHUD = new GameHUD();
@@ -72,6 +61,14 @@ void GameRun::Run() {
     {
 		throw GameException("Font not found");
 	}
+	int highScore = 0;
+	{
+		ifstream fin("highscore.txt");
+		if (fin.is_open()) {
+			fin >> highScore;
+		}
+	}
+	player->setHighScore(highScore);
 	const int targetFPS = 60; // Change to 30 for 30 FPS
 	const float frameTime = 1.0f / targetFPS;
     Text ScoreText(font);
@@ -133,11 +130,7 @@ void GameRun::Run() {
 		HighScoreText.setString("High score:" + to_string(player->getHighScore()));
 		if (player->getScore() > player->getHighScore()) {
 			player->setHighScore(player->getScore());
-			ofstream saveFile("E:\\ProiectPOO\\ProiectPOO\\highscore.txt");
-			if (saveFile.is_open()) {
-				saveFile << player->getHighScore();
-				saveFile.close();
-			}
+			
 		}
         window->clear(Color(200, 200, 200));
 		background->draw(*window);
@@ -155,7 +148,10 @@ void GameRun::Run() {
         window->display();
 		
     }
-	
+	ofstream fout("highscore.txt");
+	if (fout.is_open()) {
+		fout << player->getHighScore();
+	}
 	
     cout << "App is closing..." << endl;
 }

@@ -36,7 +36,15 @@ bool CollectibleSpawner::getfireRateActive()
 }
 void CollectibleSpawner::Update(RenderWindow &window, Player &player)
 {
-	if (!player.get_state()) ClearVector();
+	if (!player.get_state()) { 
+		ClearVector();
+		armorActive = false;
+		fireRateActive = false;
+		armorClock.restart();
+		fireRateClock.restart();
+		player.setImmunity(false);
+		player.setShootingCooldown(1.f);
+	}
 	if (SpawnClock.getElapsedTime().asSeconds() >= getRandomTime() && Collectibles.size() <= 30 && player.getScore()>=500.f)
 	{
 		SpawnClock.restart();
@@ -49,7 +57,7 @@ void CollectibleSpawner::Update(RenderWindow &window, Player &player)
 	}
 	if (fireRateActive && fireRateClock.getElapsedTime().asSeconds() >= 10.f)
 	{
-		player.setShootingCooldown(0.5f);
+		player.setShootingCooldown(1.f);
 		fireRateActive = false;
 	}
 	for (auto it = Collectibles.begin(); it != Collectibles.end();)

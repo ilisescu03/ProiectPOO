@@ -7,7 +7,8 @@
 using namespace std;
 using namespace sf;
 Texture Player::_texture("E:\\ProiectPOO\\ProiectPOO\\playersprites.png");
-Player::Player(string _name, float _health, float _maxhealth, bool _isAlive, float x, float y, float _speed) : Character(x, y, _health, _speed, 0), CurrentFrame(_texture)
+Texture Player::shootTexture("E:\\ProiectPOO\\ProiectPOO\\shooteffect.png");
+Player::Player(string _name, float _health, float _maxhealth, bool _isAlive, float x, float y, float _speed) : Character(x, y, _health, _speed, 0), CurrentFrame(_texture), ShootSprite(shootTexture)
 {
   
     
@@ -19,7 +20,10 @@ Player::Player(string _name, float _health, float _maxhealth, bool _isAlive, flo
     CurrentFrame.setScale(Vector2f(0.5f, 0.5f));
     CurrentFrame.setOrigin(Vector2f(160.f, 160.f));
 
-	
+    ShootSprite.setScale(Vector2f(0.5f, 0.5f));
+    ShootSprite.setOrigin(Vector2f(160.f, 160.f));
+    ShootSprite.setColor(Color::Transparent);
+
     initialPosition = Position;
     health = _health;
 	maxhealth = _maxhealth;
@@ -59,7 +63,10 @@ void Player::setHighScore(int value)
 }
 void Player::Update()
 {
-    
+    if (shootingEffectOn && effectClock.getElapsedTime().asSeconds() >=0.25f) {
+        ShootSprite.setColor(Color::Transparent);
+        shootingEffectOn = false;
+    }
     if (isAlive && takesDamage && damageClock.getElapsedTime().asSeconds() >= 0.5f)
     {
         CurrentFrame.setColor(Color::White);
@@ -70,6 +77,7 @@ void Player::Update()
 void Player::setShootingCooldown(float value)
 {
 	shootingCooldown = value;
+
 }
 void Player::setImmunity(bool value)
 {
@@ -106,12 +114,14 @@ void Player::handleInput(RenderWindow& window)
         if (Keyboard::isKeyPressed(Keyboard::Key::Left))
         {
             CurrentFrame.rotate(-degrees(speed));
+            ShootSprite.rotate(-degrees(speed));
             angle -= speed;
             isMoving = true;
         }
         if (Keyboard::isKeyPressed(Keyboard::Key::Right))
         {
             CurrentFrame.rotate(degrees(speed));
+            ShootSprite.rotate(degrees(speed));
             angle += speed;
             isMoving = true;
         }
@@ -161,7 +171,11 @@ void Player::handleInput(RenderWindow& window)
     }*/
     if (Keyboard::isKeyPressed(Keyboard::Key::R))
     {
-        Respawn();
+		if (!isAlive)
+		{
+			Respawn();
+		}
+   
     }
     if (Keyboard::isKeyPressed(Keyboard::Key::L))
     {
@@ -235,6 +249,10 @@ int Player::getHighScore()
 }
 void Player::shoot()
 {
+    shootingEffectOn = true;
+    ShootSprite.setColor(Color::White);
+    shootClock.restart();
+    effectClock.restart();
     
         Bullet newBullet;
         float rotationinrads=angle* (3.14159265359f / 180.f);
@@ -258,6 +276,8 @@ void Player::move()
 
     if (isAlive) {
 		CurrentFrame.setPosition(Position);
+        ShootSprite.setPosition(Position);
+
         collider.setPosition(Position);
     }
 }
@@ -272,7 +292,7 @@ void Player::draw(RenderWindow& window)
         bullets[i].draw(window);
     }
     window.draw(CurrentFrame);
-
+	window.draw(ShootSprite);
     window.draw(collider);
 
 }
@@ -302,6 +322,8 @@ void Player::TakeDamage(float value)
 void Player::Die()
 {
     CurrentFrame.setColor(Color::Transparent);
+    ShootSprite.setColor(Color::Transparent);
+    shootingEffectOn = false;
     isAlive = false;
     cout << "Player is dead!" << endl;
     cout << "Your score:" << score << "     Your high score:" << highScore << endl;
