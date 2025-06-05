@@ -25,6 +25,7 @@ class GameRun
 	bool armorActive = false;
 	bool fireRateActive = false;
 	
+	bool fixedPaused = false;
 
 	GameHUD* gameHUD;
 	GameOverMenu* gameOverMenu;

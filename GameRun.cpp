@@ -98,6 +98,19 @@ void GameRun::Run() {
 	float totalTime = 0.f;
 	
     while (window->isOpen()) {
+		if (player->isGamePaused())
+		{
+			gameHUD->TogglePauseText(true);
+			gameHUD->FixedDraw(*window);
+			if(!fixedPaused) window->display();
+			fixedPaused = true;
+		}
+		else
+		{
+			gameHUD->TogglePauseText(false);
+			fixedPaused = false;
+
+		}
 		if (!player->isGamePaused()) {
 			Time elapsed = clock.restart();
 			float deltaTime = elapsed.asSeconds();
@@ -153,6 +166,7 @@ void GameRun::Run() {
 			}
 			collectibleSpawner->Update(*window, *player);
 			gameHUD->Update(*collectibleSpawner, *window, player->getHealth(), player->getMaxHealth(), player->getScore(), player->getHighScore(), totalTime, TimerText, ScoreText, HighScoreText);
+			
 			gameOverMenu->draw(*window, player->getScore(), player->getHighScore());
 			window->display();
 		}

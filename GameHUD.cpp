@@ -7,7 +7,7 @@ using namespace sf;
 Texture GameHUD::armorTexture("E:\\ProiectPOO\\ProiectPOO\\Armor.png");
 Texture GameHUD::fireRateTexture("E:\\ProiectPOO\\ProiectPOO\\FireRate.png");
 Font GameHUD::textFont("E:\\ProiectPOO\\ProiectPOO\\Pixeboy-z8XGD.ttf");
-GameHUD::GameHUD() : armorSprite(armorTexture), fireRateSprite(fireRateTexture), armorCountText(textFont), fireRateCountText(textFont)
+GameHUD::GameHUD() : armorSprite(armorTexture), fireRateSprite(fireRateTexture), armorCountText(textFont), fireRateCountText(textFont), pauseText(textFont)
 {
 	armorSprite.setColor(Color::Transparent);
 	fireRateSprite.setColor(Color::Transparent);
@@ -25,6 +25,13 @@ GameHUD::GameHUD() : armorSprite(armorTexture), fireRateSprite(fireRateTexture),
 	fireRateCountText.setOutlineColor(Color::Transparent);
 	fireRateCountText.setOutlineThickness(2.f);
 
+	pauseText.setFont(textFont);
+	pauseText.setCharacterSize(100);
+	pauseText.setString("PAUSED");
+	pauseText.setFillColor(Color::Transparent);
+	pauseText.setPosition(Vector2f(600.f, 350.f)); // Centrat pe ecran
+	pauseText.setOutlineColor(Color::Transparent);
+	pauseText.setOutlineThickness(2.f);
 	// DOAR modificăm valorile din paranteze:
 	armorSprite.setPosition(Vector2f(460.f, 15.f));        // Armor sprite mai la stânga
 	fireRateSprite.setPosition(Vector2f(530.f, 25.f));      // FireRate sprite puțin mai la dreapta
@@ -85,6 +92,17 @@ void GameHUD::Update(CollectibleSpawner &spawner, RenderWindow& window, float he
 	healthBar->Update(window, health, maxHealth);
 
 }
+void GameHUD::TogglePauseText(bool value)
+{
+	if (value) {
+		pauseText.setFillColor(Color::White);
+		pauseText.setOutlineColor(Color::Black);
+	}
+	else {
+		pauseText.setFillColor(Color::Transparent);
+		pauseText.setOutlineColor(Color::Transparent);
+	}
+}
 void GameHUD::Draw(RenderWindow& window, Text ScoreText, Text HighScoreText, Text TimerText)
 {
 	window.draw(ScoreText);
@@ -94,5 +112,11 @@ void GameHUD::Draw(RenderWindow& window, Text ScoreText, Text HighScoreText, Tex
 	window.draw(fireRateSprite);
 	window.draw(armorCountText);
 	window.draw(fireRateCountText);
+	window.draw(pauseText);
 
+}
+void GameHUD::FixedDraw(RenderWindow& window)
+{
+	TogglePauseText(true);
+	window.draw(pauseText);
 }

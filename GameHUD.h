@@ -18,11 +18,14 @@ private:
 	static Font textFont;
 	Text armorCountText;
 	Text fireRateCountText;
+	Text pauseText;
 public:
 	
 	GameHUD();
 	~GameHUD();
 	void Update(CollectibleSpawner &spawner, RenderWindow& window, float health, float maxHealth, int score, int highScore, float totalTime, Text TimerText, Text ScoreText, Text HighScoreText);
+	void TogglePauseText(bool value);
 	void Draw(RenderWindow& window, Text ScoreText, Text HighScoreText, Text TimerText);
+	void FixedDraw(RenderWindow& window);
 };
 
